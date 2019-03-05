@@ -2,6 +2,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 /**
@@ -53,4 +55,28 @@ public class BookRegistryTest
         assertTrue(bookMade);
 
     }
+
+    @Test
+    public void testGetIterator()
+    {
+        BookRegistry bookRegistry = new BookRegistry();
+
+        for (int i = 1; i<11; i++)
+        {
+            bookRegistry.addBook("Book "+i, "Publisher "+i, "Author "+i, "Edition "+i, "2019.01."+i);
+        }
+
+        Iterator<Book> bookListIt = bookRegistry.getIterator();
+        boolean isBookListEmpty = bookListIt.hasNext();
+
+        int numberOfBooks = 0;
+        while (bookListIt.hasNext() && numberOfBooks<20)
+        {
+            bookListIt.next();
+            numberOfBooks++;
+        }
+        assertTrue(numberOfBooks==10 && isBookListEmpty);
+
+    }
+
 }
