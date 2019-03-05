@@ -31,7 +31,7 @@ public class Book
         this.title = title;
         this.publisher = publisher;
         this.author = author;
-        this. edition = edition;
+        this.edition = edition;
         this.datePublished = datePublished;
         this.series = null;
     }
