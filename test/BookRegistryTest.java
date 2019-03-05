@@ -1,6 +1,7 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
 
@@ -48,9 +49,31 @@ public class BookRegistryTest
         if (bookMade)
         {
             bookRegistry.removeBook("Arne");
-            assertEquals( null, bookRegistry.getBookByTitle("Arne"));
+            assertNull(bookRegistry.getBookByTitle("Arne"));
         }
         assertTrue(bookMade);
 
+    }
+
+    @Test
+    public void testGetBookByTitleCorrectTitle()
+    {
+        BookRegistry bookRegistry = new BookRegistry();
+        bookRegistry.addBook("Arne", "Publisher", "Author", "7", "2019.02.01");
+        assertEquals("Arne", bookRegistry.getBookByTitle("Arne").getTitle());
+    }
+
+    @Test
+    public void testGetBookByTitleWrongTitle()
+    {
+        BookRegistry bookRegistry = new BookRegistry();
+        bookRegistry.addBook("Arne", "Publisher", "Author", "7", "2019.02.01");
+        try
+        {
+            bookRegistry.getBookByTitle("arne").getTitle();
+            fail("should've thrown an exception");
+        } catch (Throwable NullPointerException) {
+                assertEquals(NullPointerException.class, NullPointerException.getClass());
+        }
     }
 }

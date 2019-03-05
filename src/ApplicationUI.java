@@ -63,7 +63,7 @@ public class ApplicationUI
     {
         this.init();
 
-        //this.bookRegistry.fillBookListWithDummies();
+        this.bookRegistry.fillBookListWithDummies();
 
         boolean quit = false;
 
@@ -392,6 +392,20 @@ public class ApplicationUI
         Scanner reader = new Scanner(System.in);
         int input = reader.nextInt();
         return input;
+    }
+
+    /**
+     * Checks if string is not empty nor null.
+     */
+    private boolean isEmpty(String input)
+    {
+        boolean isEmpty = true;
+        if ( input.length() > 0 )
+        {
+            isEmpty = false;
+        }
+
+        return isEmpty;
     }
 
     /**
