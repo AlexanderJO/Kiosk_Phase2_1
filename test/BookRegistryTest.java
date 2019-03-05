@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test cases of BookRegistry class.
+ */
 public class BookRegistryTest
 {
 
