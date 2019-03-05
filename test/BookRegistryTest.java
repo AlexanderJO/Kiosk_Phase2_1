@@ -3,6 +3,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Iterator;
+
 import static org.junit.Assert.*;
 
 /**
@@ -84,4 +86,28 @@ public class BookRegistryTest
                 assertEquals(NullPointerException.class, NullPointerException.getClass());
         }
     }
+
+    @Test
+    public void testGetIterator()
+    {
+        BookRegistry bookRegistry = new BookRegistry();
+
+        for (int i = 1; i<11; i++)
+        {
+            bookRegistry.addBook("Book "+i, "Publisher "+i, "Author "+i, "Edition "+i, "2019.01."+i);
+        }
+
+        Iterator<Book> bookListIt = bookRegistry.getIterator();
+        boolean isBookListEmpty = bookListIt.hasNext();
+
+        int numberOfBooks = 0;
+        while (bookListIt.hasNext() && numberOfBooks<20)
+        {
+            bookListIt.next();
+            numberOfBooks++;
+        }
+        assertTrue(numberOfBooks==10 && isBookListEmpty);
+
+    }
+
 }
