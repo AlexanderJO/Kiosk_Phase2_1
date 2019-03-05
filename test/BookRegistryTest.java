@@ -21,6 +21,15 @@ public class BookRegistryTest
     }
 
     @Test
+    public void setBookInSeries()
+    {
+        BookRegistry bookRegistry = new BookRegistry();
+        bookRegistry.addBook("Hei", "Sondre", "Alex", "4", "12");
+        bookRegistry.addBookToSeries("Hei", "Kjekke dager");
+        assertEquals("Kjekke dager", bookRegistry.getBookByTitle("Hei").getSeries());
+    }
+
+    @Test
     public void testAddBook()
     {
         BookRegistry bookRegistry = new BookRegistry();
@@ -51,6 +60,5 @@ public class BookRegistryTest
             assertEquals( null, bookRegistry.getBookByTitle("Arne"));
         }
         assertTrue(bookMade);
-
     }
 }
