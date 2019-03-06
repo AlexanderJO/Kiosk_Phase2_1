@@ -63,7 +63,7 @@ public class ApplicationUI
     {
         this.init();
 
-        this.bookRegistry.fillBookListWithDummies();
+        //this.bookRegistry.fillBookListWithDummies();
 
         boolean quit = false;
 
@@ -174,32 +174,54 @@ public class ApplicationUI
         System.out.println("Please enter the title of the book: ");
         String title = scannerString();                       // Waits for the user to push enter.
 
-        System.out.println("Please enter the publisher of the book: ");
-        String publisher = scannerString();                       // Waits for the user to push enter.
-
-        System.out.println("Please enter the author of the book: ");
-        String author = scannerString();                      // Waits for the user to push enter.
-
-        System.out.println("Please enter the edition of the book: ");
-        String edition = scannerString();                     // Waits for the user to push enter.
-
-        System.out.println("Please enter the publishing date of the book: ");
-        String datePublished = scannerString();                     // Waits for the user to push enter.
-
-
-        System.out.println("Do you want to add this book to a series [Yes/No]?");
-        String yesNo = scannerString().toLowerCase();
-
-        if ( yesNo.equals("yes"))
+        String publisher = "";
+        if(!isEmpty(title))
         {
-            System.out.println("Please enter the series of the book: ");
-            String series = scannerString();
-            this.bookRegistry.addBookWithSeries(title, publisher, author, edition, datePublished, series);
+            System.out.println("Please enter the publisher of the book: ");
+            publisher = scannerString();                       // Waits for the user to push enter.
         }
 
-        if ( yesNo.equals("no"))
+        String author = "";
+        if(!isEmpty(publisher))
         {
-            this.bookRegistry.addBook(title, publisher, author, edition, datePublished);
+            System.out.println("Please enter the author of the book: ");
+            author = scannerString();                      // Waits for the user to push enter.
+        }
+
+        String edition = "";
+        if(!isEmpty(author))
+        {
+            System.out.println("Please enter the edition of the book: ");
+            edition = scannerString();                     // Waits for the user to push enter.
+        }
+
+        String datePublished = "";
+        if(!isEmpty(edition))
+        {
+            System.out.println("Please enter the publishing date of the book: ");
+            datePublished = scannerString();                     // Waits for the user to push enter.
+        }
+
+        if(!isEmpty(datePublished))
+        {
+            System.out.println("Do you want to add this book to a series [Yes/No]?");
+            String yesNo = scannerString().toLowerCase();                // Waits for the user to push enter.
+
+            if (yesNo.equals("yes"))
+            {
+                System.out.println("Please enter the series of the book: ");
+                String series = scannerString();
+                this.bookRegistry.addBookWithSeries(title, publisher, author, edition, datePublished, series);
+            }
+
+            if (yesNo.equals("no"))
+            {
+                this.bookRegistry.addBook(title, publisher, author, edition, datePublished);
+            }
+        }
+        else
+        {
+            System.out.println("Invalid book parameter, no book was made.");
         }
     }
 
@@ -377,9 +399,24 @@ public class ApplicationUI
      */
     private String scannerString()
     {
-        Scanner reader = new Scanner(System.in);
-        String input = reader.nextLine();
-        return input;
+        boolean scanning = true;
+        int scanCount = 0;
+        String input = "";
+        while (scanning && scanCount<3)
+        {
+            Scanner reader = new Scanner(System.in);
+            input = reader.nextLine();
+            if(!isEmpty(input))
+            {
+                scanning=false;
+            }
+            scanCount++;
+            if(scanning)
+            {
+                System.out.println("Try again.");
+            }
+        }
+        return input.trim();
     }
 
     /**
@@ -395,12 +432,12 @@ public class ApplicationUI
     }
 
     /**
-     * Checks if string is not empty nor null.
+     * Checks if string is empty or null.
      */
     private boolean isEmpty(String input)
     {
         boolean isEmpty = true;
-        if ( input.length() > 0 )
+        if ( input.trim().length() > 0 )
         {
             isEmpty = false;
         }
