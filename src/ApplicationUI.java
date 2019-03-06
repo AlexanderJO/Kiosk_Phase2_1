@@ -136,6 +136,7 @@ public class ApplicationUI
             }
             // Add the "Exit"-choice to the menu
             System.out.println(maxMenuItemNumber + ". Exit\n");
+            this.initLineString();
             System.out.println("Please choose menu item (1-" + maxMenuItemNumber + "): ");
         }
     }
@@ -171,46 +172,94 @@ public class ApplicationUI
     private void addNewBook()
     {
         // Brukeren har nå valgt å legge til en bok
+        this.initLineString();
         System.out.println("Please enter the title of the book: ");
-        String title = scannerString();                       // Waits for the user to push enter.
+        String title = "";                       // Waits for the user to push enter.
 
-        System.out.println("Please enter the publisher of the book: ");
-        String publisher = scannerString();                       // Waits for the user to push enter.
-
-        System.out.println("Please enter the author of the book: ");
-        String author = scannerString();                      // Waits for the user to push enter.
-
-        System.out.println("Please enter the edition of the book: ");
-        String edition = scannerString();                     // Waits for the user to push enter.
-
-        System.out.println("Please enter the publishing date of the book: ");
-        String datePublished = scannerString();                     // Waits for the user to push enter.
-
-
-        System.out.println("Do you want to add this book to a series [Yes/No]?");
-        String yesNo = scannerString().toLowerCase();
-
-        if ( yesNo.equals("yes"))
+        // HOLD! Er dette rett måte å løse det på?
+        while ( this.isStringEmpty(title = scannerString()) || this.bookRegistry.getBookByTitle(title) != null )
         {
-            System.out.println("Please enter the series of the book: ");
-            String series = scannerString();
-            this.bookRegistry.addBookWithSeries(title, publisher, author, edition, datePublished, series);
+            if ( this.bookRegistry.getBookByTitle(title) != null )
+            {
+                errorMessageDuplicateTitle();
+
+                this.initLineString();
+                System.out.println("Please enter the title of the book: ");
+            }
+
+            else
+            {
+                this.errorMessageEmptyString();
+
+                this.initLineString();
+                System.out.println("Please enter the title of the book: ");
+            }
         }
 
-        if ( yesNo.equals("no"))
+        this.initLineString();
+        System.out.println("Please enter the publisher of the book: ");
+        this.initLineString();
+        String publisher = scannerString();                       // Waits for the user to push enter.
+
+        this.initLineString();
+        System.out.println("Please enter the author of the book: ");
+        this.initLineString();
+        String author = scannerString();                      // Waits for the user to push enter.
+
+        this.initLineString();
+        System.out.println("Please enter the edition of the book: ");
+        this.initLineString();
+        String edition = scannerString();                     // Waits for the user to push enter.
+
+        this.initLineString();
+        System.out.println("Please enter the publishing date of the book: ");
+        this.initLineString();
+        String datePublished = scannerString();                     // Waits for the user to push enter.
+
+        this.initLineString();
+        System.out.println("Do you want to add this book to a series [Yes/No]?");
+        // String yesNo = scannerString().toLowerCase();
+
+        boolean choiceTaken = false;
+
+        while ( !choiceTaken )
         {
-            this.bookRegistry.addBook(title, publisher, author, edition, datePublished);
+            this.initLineString();
+            String yesNo = scannerString().toLowerCase();
+
+            // Checks if input is yes.
+            if ( yesNo.equals("yes"))
+            {
+                this.initLineString();
+                System.out.println("Please enter the series of the book: ");
+                String series = scannerString();
+                this.bookRegistry.addBookWithSeries(title, publisher, author, edition, datePublished, series);
+                choiceTaken = true;
+            }
+
+            // Checks if input is no.
+            else if ( yesNo.equals("no"))
+            {
+                this.bookRegistry.addBook(title, publisher, author, edition, datePublished);
+                choiceTaken = true;
+            }
+
+            this.initLineString();
+            System.out.println("Do you want to add this book to a series [Yes/No]?");
         }
     }
 
     /**
-     *
+     * Adds the book object to a series.
+     * Assignes "series" field of book to input.
      */
     private void addBookToSeries()
     {
+        this.initLineString();
         System.out.println("Please enter title of the book that you want to a series: ");
         String title = scannerString();                       // Waits for the user to push enter.
 
+        this.initLineString();
         System.out.println("Please enter the name of the series: ");
         String series = scannerString();                       // Waits for the user to push enter.
 
@@ -239,7 +288,7 @@ public class ApplicationUI
 
     }
 
-    // ---------------- Aksessor Methods ---------------
+    // ---------------- Accessor Methods ---------------
 
     /**
      * Find and display a product based om name (title).
@@ -368,7 +417,16 @@ public class ApplicationUI
         }
     }
 
-    // ------------- Iterator Method ----------------
+    /**
+     * The initial value in front of each command line and input.
+     */
+    private void initLineString()
+    {
+
+        System.out.print(">  ");
+    }
+
+    // ------------- Scanner and Menu Method ----------------
 
     /**
      * Takes in input from user.
@@ -377,6 +435,7 @@ public class ApplicationUI
      */
     private String scannerString()
     {
+        this.initLineString();
         Scanner reader = new Scanner(System.in);
         String input = reader.nextLine();
         return input;
@@ -389,6 +448,7 @@ public class ApplicationUI
      */
     private int scannerInt()
     {
+        this.initLineString();
         Scanner reader = new Scanner(System.in);
         int input = reader.nextInt();
         return input;
@@ -397,7 +457,7 @@ public class ApplicationUI
     /**
      * Checks if string is not empty nor null.
      */
-    private boolean isEmpty(String input)
+    private boolean isStringEmpty(String input)
     {
         boolean isEmpty = true;
         if ( input.length() > 0 )
@@ -428,6 +488,24 @@ public class ApplicationUI
         return menuSelection;
     }
 
+    // ------------------- Error Methods --------------
 
+    /**
+     * Prints an error message if expected string length is to short (0 characters).
+     */
+    private void errorMessageEmptyString()
+    {
+        this.initLineString();
+        System.out.println("Text of min. 1 character is required.");
+    }
+
+    /**
+     * Prints an error message if title is already taken.
+     */
+    private void errorMessageDuplicateTitle()
+    {
+        this.initLineString();
+        System.out.println("Book with this title already exists. Please create an unique title.");
+    }
 
 }

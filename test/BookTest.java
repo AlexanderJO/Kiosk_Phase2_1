@@ -18,8 +18,11 @@ public class BookTest
     }
 
     @Test
-    public void setBookInSeries()
+    public void testSetBookInSeries()
     {
+        Book book = new Book("Hei", "Sondre", "Alex", "4", "12");
+        book.setBookInSeries("Ny serie");
+        assertEquals("Ny serie", book.getSeries());
     }
 
     @Test
