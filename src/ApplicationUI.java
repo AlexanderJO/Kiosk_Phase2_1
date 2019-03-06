@@ -174,12 +174,24 @@ public class ApplicationUI
         // Brukeren har nå valgt å legge til en bok
         this.initLineString();
         System.out.println("Please enter the title of the book: ");
-        String title = "";                       // Waits for the user to push enter.
 
         // HOLD! Er dette rett måte å løse det på?
-        while ( this.isStringEmpty(title = scannerString()) || this.bookRegistry.getBookByTitle(title) != null )
+        // Checks if title input is empty or if title already exists.
+        String title = "";
+        boolean uniqueTitle = false;
+        while ( !uniqueTitle )
         {
-            if ( this.bookRegistry.getBookByTitle(title) != null )
+            title = this.scannerString();     // Waits for the user to push enter.
+            //this.isStringEmpty(title = scannerString()) || this.bookRegistry.getBookByTitle(title) != null
+            if ( this.isStringEmpty(title) )
+            {
+                this.errorMessageEmptyString();
+
+                this.initLineString();
+                System.out.println("Please enter the title of the book: ");
+            }
+
+            else if ( this.bookRegistry.getBookByTitle(title) != null )
             {
                 errorMessageDuplicateTitle();
 
@@ -189,50 +201,42 @@ public class ApplicationUI
 
             else
             {
-                this.errorMessageEmptyString();
-
-                this.initLineString();
-                System.out.println("Please enter the title of the book: ");
+                uniqueTitle = true;
             }
         }
 
         this.initLineString();
         System.out.println("Please enter the publisher of the book: ");
-        this.initLineString();
-        String publisher = scannerString();                       // Waits for the user to push enter.
+        String publisher = this.scannerString();                       // Waits for the user to push enter.
 
         this.initLineString();
         System.out.println("Please enter the author of the book: ");
-        this.initLineString();
-        String author = scannerString();                      // Waits for the user to push enter.
+        String author = this.scannerString();                      // Waits for the user to push enter.
 
         this.initLineString();
         System.out.println("Please enter the edition of the book: ");
-        this.initLineString();
-        String edition = scannerString();                     // Waits for the user to push enter.
+        String edition = this.scannerString();                     // Waits for the user to push enter.
 
         this.initLineString();
         System.out.println("Please enter the publishing date of the book: ");
-        this.initLineString();
-        String datePublished = scannerString();                     // Waits for the user to push enter.
+        String datePublished = this.scannerString();                     // Waits for the user to push enter.
 
         this.initLineString();
-        System.out.println("Do you want to add this book to a series [Yes/No]?");
-        // String yesNo = scannerString().toLowerCase();
+        this.seriesToBookQuestion();
 
         boolean choiceTaken = false;
 
         while ( !choiceTaken )
         {
             this.initLineString();
-            String yesNo = scannerString().toLowerCase();
+            String yesNo = this.scannerString().toLowerCase();
 
             // Checks if input is yes.
             if ( yesNo.equals("yes"))
             {
                 this.initLineString();
                 System.out.println("Please enter the series of the book: ");
-                String series = scannerString();
+                String series = this.scannerString();
                 this.bookRegistry.addBookWithSeries(title, publisher, author, edition, datePublished, series);
                 choiceTaken = true;
             }
@@ -245,7 +249,7 @@ public class ApplicationUI
             }
 
             this.initLineString();
-            System.out.println("Do you want to add this book to a series [Yes/No]?");
+            this.seriesToBookQuestion();
         }
     }
 
@@ -257,11 +261,11 @@ public class ApplicationUI
     {
         this.initLineString();
         System.out.println("Please enter title of the book that you want to a series: ");
-        String title = scannerString();                       // Waits for the user to push enter.
+        String title = this.scannerString();                       // Waits for the user to push enter.
 
         this.initLineString();
         System.out.println("Please enter the name of the series: ");
-        String series = scannerString();                       // Waits for the user to push enter.
+        String series = this.scannerString();                       // Waits for the user to push enter.
 
         this.bookRegistry.addBookToSeries(title, series);
     }
@@ -273,7 +277,7 @@ public class ApplicationUI
     private void removeBookByTitle()
     {
         System.out.println("Please enter the title of the book that you want to remove: ");
-        String title = scannerString();
+        String title = this.scannerString();
         Book book = this.bookRegistry.getBookByTitle(title);
         if ( book != null )
         {
@@ -302,7 +306,7 @@ public class ApplicationUI
     private void findBookByTitle()
     {
         System.out.println("Please enter title of the book you want to find: ");
-        String title = scannerString();
+        String title = this.scannerString();
         Book book = this.bookRegistry.getBookByTitle(title);
         this.printBook(book);
     }
@@ -314,7 +318,7 @@ public class ApplicationUI
     private void findBookByAuthor()
     {
         System.out.println("Please enter the author of the book you want to find: ");
-        String author = scannerString();
+        String author = this.scannerString();
         int numberOfBooks = 0;
 
         Iterator<Book> bookListIt = this.bookRegistry.getIterator();
@@ -350,7 +354,7 @@ public class ApplicationUI
     private void findBooksBySeries()
     {
         System.out.println("Please enter the series for the book(-s) you want to find: ");
-        String series = scannerString();
+        String series = this.scannerString();
         int numberOfBooks = 0;
 
         Iterator<Book> bookListIt = this.bookRegistry.getIterator();
@@ -386,20 +390,64 @@ public class ApplicationUI
     {
         Iterator<Book> bookListIt = this.bookRegistry.getIterator();
 
-        if ( !bookListIt.hasNext() )
+
+        this.initLineString();
+        System.out.println("Do you want a detailed list over the books? [Yes/No]");
+        String yesNo = this.scannerString().toLowerCase();
+
+        // Checks if input is yes.
+        if ( yesNo.equals("yes"))
         {
-            System.out.println("No books in registry.");
+            if ( !bookListIt.hasNext() )
+            {
+                System.out.println("No books in registry.");
+            }
+
+            while (bookListIt.hasNext())
+            {
+                Book book = bookListIt.next();
+                this.printBookDetailed(book);
+            }
         }
 
-        while (bookListIt.hasNext())
+        // Checks if input is no.
+        else if ( yesNo.equals("no"))
         {
-            Book book = bookListIt.next();
-            printBook(book);
+            if ( !bookListIt.hasNext() )
+            {
+                System.out.println("No books in registry.");
+            }
+
+            while (bookListIt.hasNext())
+            {
+                Book book = bookListIt.next();
+                this.printBook(book);
+            }
         }
+
+
+
+//        if ( !bookListIt.hasNext() )
+//        {
+//            System.out.println("No books in registry.");
+//        }
+//
+//        while (bookListIt.hasNext())
+//        {
+//            Book book = bookListIt.next();
+//            printBook(book);
+//        }
     }
+
+
 
     // ----------- Print Methods ---------------
 
+    /**
+     * Prints a single line string of information for book.
+     * Prints either with or without series.
+     * @param book takes in book of class Book.
+     */
     private void printBook(Book book)
     {
         if (book.getSeries() == null)
@@ -418,12 +466,44 @@ public class ApplicationUI
     }
 
     /**
+     * Prints a detailed list over several lines with information for book
+     * Prints list with series field marked as "Not available" if
+     * no series has been added to the book.
+     * @param book takes in book of class Book.
+     */
+    private void printBookDetailed(Book book)
+    {
+        System.out.println("----------------------------------------------------");
+        System.out.println("Title:              " + book.getTitle());
+        System.out.println("Publisher:          " + book.getPublisher());
+        System.out.println("Author:             " + book.getAuthor());
+        System.out.println("Edition:            " + book.getEdition());
+        System.out.println("Date published:     " + book.getDatePublished());
+        if ( book.getSeries() == null )
+        {
+            System.out.println("Series:             Not available.");
+        }
+        else
+        {
+            System.out.println("Series:         " + book.getSeries());
+        }
+    }
+
+    /**
      * The initial value in front of each command line and input.
      */
     private void initLineString()
     {
 
         System.out.print(">  ");
+    }
+
+    /**
+     * Prints a message stating that user shoudl
+     */
+    private void seriesToBookQuestion()
+    {
+        System.out.println("Do you want to add this book to a series [Yes/No]?");
     }
 
     // ------------- Scanner and Menu Method ----------------
@@ -480,7 +560,7 @@ public class ApplicationUI
     private int menuInput() throws InputMismatchException
     {
         int maxMenuItemNumber = menuItems.length + 1;
-        int menuSelection = scannerInt();
+        int menuSelection = this.scannerInt();
         if ((menuSelection < 1) || (menuSelection > maxMenuItemNumber))
         {
             throw new InputMismatchException();
