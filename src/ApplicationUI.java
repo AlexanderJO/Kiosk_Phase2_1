@@ -487,6 +487,7 @@ public class ApplicationUI
         {
             System.out.println("Series:         " + book.getSeries());
         }
+        System.out.println("----------------------------------------------------");
     }
 
     /**
