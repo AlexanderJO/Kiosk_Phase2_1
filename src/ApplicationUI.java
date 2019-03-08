@@ -384,7 +384,8 @@ public class ApplicationUI
     }
 
     /**
-     * Lists all the products/literature in the register
+     * Lists all the books in the book registry.
+     *
      */
     private void listAllBooks()
     {
@@ -424,19 +425,6 @@ public class ApplicationUI
                 this.printBook(book);
             }
         }
-
-
-
-//        if ( !bookListIt.hasNext() )
-//        {
-//            System.out.println("No books in registry.");
-//        }
-//
-//        while (bookListIt.hasNext())
-//        {
-//            Book book = bookListIt.next();
-//            printBook(book);
-//        }
     }
 
 
