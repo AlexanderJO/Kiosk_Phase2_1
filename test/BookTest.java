@@ -18,47 +18,50 @@ public class BookTest
     }
 
     @Test
-    public void setBookInSeries()
+    public void testSetBookInSeries()
     {
+        Book book = new Book("Hei", "Sondre", "Alex", "4", "12");
+        book.setBookInSeries("Ny serie");
+        assertEquals("Ny serie", book.getSeries());
     }
 
     @Test
-    public void getTitle()
+    public void testGetTitle()
     {
         Book book = new Book("Hei", "Sondre", "Alex", "4", "12");
         assertEquals("Hei", book.getTitle());
     }
 
     @Test
-    public void getPublisher()
+    public void testGetPublisher()
     {
         Book book = new Book("Hei", "Sondre", "Alex", "4", "12");
         assertEquals("Sondre", book.getPublisher());
     }
 
     @Test
-    public void getAuthor()
+    public void testGetAuthor()
     {
         Book book = new Book("Hei", "Sondre", "Alex", "4", "12");
         assertEquals("Alex", book.getAuthor());
     }
 
     @Test
-    public void getEdition()
+    public void testGetEdition()
     {
         Book book = new Book("Hei", "Sondre", "Alex", "4", "12");
         assertEquals("4", book.getEdition());
     }
 
     @Test
-    public void getDatePublished()
+    public void testGetDatePublished()
     {
         Book book = new Book("Hei", "Sondre", "Alex", "4", "12");
         assertEquals("12", book.getDatePublished());
     }
 
     @Test
-    public void getSeries()
+    public void testGetSeries()
     {
 
         Book book = new Book("Hei", "Sondre", "Alex", "4", "12", "Artige dager");
