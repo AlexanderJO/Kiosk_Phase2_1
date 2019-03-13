@@ -1,10 +1,9 @@
 /**
  * Represents a book, holding information about the book.
- * 
+ * Book class inherits data from Literature class.
+ *
  * In this book class you can:
  * <ul>
- * <li> get name of book </li>
- * <li> get publisher of book </li>
  * <li> get author of book </li>
  * <li> get edition of book </li>
  * <li> get publish date of book </li>
@@ -13,66 +12,26 @@
  * @version     v1.0 (beta) 2019.02.13
  */
 
-public class Book
+public class Book extends Literature
 {
-    // Fields
-    private final String title;
-    private final String publisher;
+    // ------------------- Fields ----------------
     private final String author;
     private String edition;
     private String datePublished;
-    private String series;
-    
+
+    // ------------------- Constructor ----------------
     /**
      * Constructor for object of class Book.
      */
     public Book(String title, String publisher, String author, String edition, String datePublished)
     {
-        this.title = title;
-        this.publisher = publisher;
+        super(title, publisher);
         this.author = author;
         this.edition = edition;
         this.datePublished = datePublished;
-        this.series = null;
     }
-    
-    /**
-     * Constructor for object of class Book.
-     */
-    public Book(String title, String publisher, String author, String edition, String datePublished, String series)
-    {
-        this.title = title;
-        this.publisher = publisher;
-        this.author = author;
-        this. edition = edition;
-        this.datePublished = datePublished;
-        this.series = series;
-    }
-    
-    /**
-     * Puts the book in a series.
-     */
-    public void setBookInSeries(String series)
-    {
-        this.series = series;
-    }
-    
-    /**
-     * Gets the title of the book.
-     */
-    public String getTitle()
-    {
-        return this.title;
-    }
-    
-    /**
-     * Gets the publisher of the book.
-     */
-    public String getPublisher()
-    {
-        return this.publisher;
-    }
-    
+
+    // ------------------- Methods ----------------
     /**
      * Gets the author of the book.
      */
@@ -96,13 +55,9 @@ public class Book
     {
         return this.datePublished;
     }
-    
-    /**
-     * Gets the series for the book.
-     */
-    public String getSeries()
+
+    public String getTitle()
     {
-        return this.series;
+        return super.getTitle();
     }
-    
 }
