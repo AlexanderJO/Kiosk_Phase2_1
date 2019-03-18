@@ -12,17 +12,16 @@ import java.util.Iterator;
  * @author      Alexander J. Overvåg, Sondre Nerhus, Gustav S. Hagen
  * @version     v1.0 (beta) 2019.03.13
  */
-public class BookSeries
+public class BookSeries extends Literature
 {
     // ------------------- Fields ----------------
-//    private ArrayList<Book> books;
-    private String seriesTitle;
+    private ArrayList<Book> books;
 
     // ------------------- Constructor ----------------
-    public BookSeries(String seriesTitle)
+    public BookSeries(String seriesTitle, String publisher)
     {
-        this.seriesTitle = seriesTitle;
-//        this.books = new ArrayList<Book>();
+        super(seriesTitle, publisher);              // Inherits from super class Literature
+        this.books = new ArrayList<Book>();         // Creates empty list of books.
     }
 
     // ------------------- Methods ----------------
@@ -30,31 +29,17 @@ public class BookSeries
      * Adds the book to a book series.
      * @param book Book to be added to book series.
      */
-//    public void addBookToSeries(String, seriesTitle, Book book)
-//    {
-//        if ( this.books.contains(seriesTitle) )
-//        {
-//            this.books.
-//            this.books.add(book);
-//        }
-//
-//    }
-
-    /**
-     * Returns the series title of the books.
-     * @return the series title of the books.
-     */
-    public String getSeriesTitle()
+    public void addBookToSeries(Book book)
     {
-        return this.seriesTitle;
+        this.books.add(book);
     }
 
-//    /**
-//     * Returns the iterator of the books.
-//     * @return the iterator of the books.
-//     */
-//    public Iterator<Book> getIterator()
-//    {
-//        return this.books.iterator();
-//    }
+    /**
+     * Returns the iterator of the books.
+     * @return the iterator of the books.
+     */
+    public Iterator<Book> getIterator()
+    {
+        return this.books.iterator();
+    }
 }

@@ -12,13 +12,11 @@ public class Registry
 {
     // ------------------- Fields ----------------
     private ArrayList<Literature> literatureList;
-    private HashMap<Book, String> bookSeriesList;
 
     // ------------------- Constructor ----------------
     public Registry()
     {
         this.literatureList = new ArrayList<Literature>();
-        this.bookSeriesList = new HashMap<Book, String>();
     }
 
     // ------------------- Mutator Methods ----------------
@@ -39,18 +37,29 @@ public class Registry
     /**
      * Add book to  series.
      */
-    public void addBookToSeries(Book book, String title)
+    public boolean addBookToSeries(String title, Book book)
     {
-        this.bookSeriesList.put(book, title);
-    }
+        Boolean found = false;
 
-    /**
-     * Returns the list of book series.
-     * @return the list of book series.
-     */
-    public HashMap<Book, String> getBookSeriesList()
-    {
-        return bookSeriesList;
+        Iterator<Literature> literatureIt = this.literatureList.iterator();
+
+        while ( literatureIt.hasNext() )
+        {
+            Literature literature = literatureIt.next();
+
+            if ( literature instanceof  BookSeries )
+            {
+                BookSeries bookSeries = (BookSeries) literature;
+
+                if ( bookSeries.getTitle().equals(title) )
+                {
+                    bookSeries.addBookToSeries(book);
+                    found = true;
+                }
+            }
+        }
+
+        return found;
     }
 
     /**
@@ -206,9 +215,12 @@ public class Registry
      */
     public void fillRegistryListWithDummies()
     {
-        this.literatureList.add(new Book("Book 1", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
-        this.literatureList.add(new Book("Book 2", "Publisher 1", "Author 1", "Second Edition", "2019.01.02"));
-        this.literatureList.add(new Book("Book 3", "Publisher 2", "Author 1", "First Edition", "2019.01.01"));
+        Book book1 = new Book("Book 1", "Publisher 1", "Author 1", "First Edition", "2019.01.01");
+        Book book2 = new Book("Book 2", "Publisher 1", "Author 1", "Second Edition", "2019.01.02");
+        Book book3 = new Book("Book 3", "Publisher 2", "Author 1", "First Edition", "2019.01.01");
+        this.literatureList.add(book1);
+        this.literatureList.add(book2);
+        this.literatureList.add(book3);
         this.literatureList.add(new Book("Book 4", "Publisher 3", "Author 2", "First Edition", "2019.01.01"));
         this.literatureList.add(new Book("Book 5", "Publisher 1", "Author 2", "First Edition", "2019.01.01"));
 
@@ -217,6 +229,10 @@ public class Registry
         this.literatureList.add(new Book("Book 8", "Publisher 2", "Author 1", "First Edition", "2019.01.05"));
         this.literatureList.add(new Book("Book 9", "Publisher 3", "Author 2", "Third Edition", "2019.01.05"));
         this.literatureList.add(new Book("Book 10", "Publisher 1", "Author 2", "First Edition", "2019.01.06"));
+
+        this.addBookToSeries("Serie av styr", book1);
+        this.addBookToSeries("Serie av styr", book2);
+        this.addBookToSeries("Serie av styr", book3);
 
         this.literatureList.add(new Periodical("Periodical 1", "Publisher 1", "2019.01.06", "Woman stuff", "Magazine"));
     }
