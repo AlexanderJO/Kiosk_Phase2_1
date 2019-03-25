@@ -7,7 +7,8 @@ public class BookSeries extends Literature
 
     public BookSeries(String title, String publisher)
     {
-        super(title, publisher);
+        setTitle(title);
+        setPublisher(publisher);
         bookSeries = new ArrayList<Book>();
     }
 
@@ -18,6 +19,11 @@ public class BookSeries extends Literature
 
     public void addBookToSeries(Book book)
     {
-        bookSeries.add(book);
+        this.bookSeries.add(book);
+    }
+
+    public void removeBookFromSeries(Book book)
+    {
+        this.bookSeries.remove(book);
     }
 }

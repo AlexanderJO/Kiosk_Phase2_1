@@ -25,7 +25,8 @@ public class Book extends Literature
      */
     public Book(String title, String publisher, String author, String edition, String datePublished)
     {
-        super(title, publisher);
+        setTitle(title);
+        setPublisher(publisher);
         this.author = author;
         this.edition = edition;
         this.datePublished = datePublished;
