@@ -254,7 +254,7 @@ public class ApplicationUI
      */
     private void addNewBookSeries()
     {
-        System.out.println("Please enter the title of the series: ");
+        System.out.println("Please enter the title of the series:  ");
         String title = scannerString();                       // Waits for the user to push enter.
 
         String publisher = "";
