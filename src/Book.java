@@ -19,7 +19,7 @@ public class Book extends Literature
     private final String author;
     private String edition;
     private String datePublished;
-
+    
     /**
      * Constructor for object of class Book.
      */
@@ -31,7 +31,6 @@ public class Book extends Literature
         this.edition = edition;
         this.datePublished = datePublished;
     }
-
     /**
      * Gets the author of the book.
      */
