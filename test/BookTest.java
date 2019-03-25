@@ -7,21 +7,6 @@ import static org.junit.Assert.*;
 public class BookTest
 {
 
-    @Before
-    public void setUp() throws Exception
-    {
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-    }
-
-    @Test
-    public void setBookInSeries()
-    {
-    }
-
     @Test
     public void getTitle()
     {
@@ -57,11 +42,11 @@ public class BookTest
         assertEquals("12", book.getDatePublished());
     }
 
-    @Test
-    public void getSeries()
-    {
-
-        Book book = new Book("Hei", "Sondre", "Alex", "4", "12", "Artige dager");
-        assertEquals("Artige dager", book.getSeries());
-    }
+//    @Test
+//    public void getSeries()
+//    {
+//
+//        Book book = new Book("Hei", "Sondre", "Alex", "4", "12", "Artige dager");
+//        assertEquals("Artige dager", book.getSeries());
+//    }
 }
