@@ -55,9 +55,4 @@ public class Book extends Literature
     {
         return this.datePublished;
     }
-
-    public String getTitle()
-    {
-        return super.getTitle();
-    }
 }

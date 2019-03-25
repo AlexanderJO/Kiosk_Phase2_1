@@ -1,4 +1,6 @@
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.*;
 
 /**
@@ -90,7 +92,6 @@ public class ApplicationUI
 
                     case 5:
                         this.findBooksByAuthor();
-                        System.out.println("HAS TO BE UPDATED!");
                         break;
 
                     case 6:
@@ -261,33 +262,6 @@ public class ApplicationUI
     }
 
     /**
-     * Adds the book object to a series.
-     * Assignes "series" field of book to input.
-     */
-    private void addBookToSeries()
-    {
-        this.initLineString();
-        System.out.println("Please enter title of the book that you want to a series: ");
-        String title = this.scannerString();                       // Waits for the user to push enter.
-
-        this.initLineString();
-        System.out.println("Please enter the name of the series: ");
-        String series = this.scannerString();                       // Waits for the user to push enter.
-
-        Book book = this.literatureRegistry.bookSearch(title);
-
-        if ( book != null )
-        {
-            this.literatureRegistry.addBookToSeries(book, series);
-        }
-
-        else
-        {
-            System.out.println("Book does not exist.");
-        }
-    }
-
-    /**
      * Remove the book by title.
      * Takes in string input from user.
      */
@@ -296,6 +270,7 @@ public class ApplicationUI
         System.out.println("Please enter the title of the book that you want to remove: ");
         String title = this.scannerString();
         Book book = this.literatureRegistry.bookSearch(title);
+
         if ( book != null )
         {
             this.literatureRegistry.removeBook(title);
@@ -305,6 +280,35 @@ public class ApplicationUI
         else
         {
             System.out.println("No book with title" + title + ".");
+        }
+    }
+
+    /**
+     * Adds the book object to a series.
+     * Assignes "series" field of book to input.
+     */
+    private void addBookToSeries()
+    {
+        this.initLineString();
+        System.out.println("Please enter title of the book that you want to a series: ");
+        String bookTitle = this.scannerString();                       // Waits for the user to push enter.
+
+        this.initLineString();
+        System.out.println("Please enter the name of the series: ");
+        String seriesTitle = this.scannerString();                       // Waits for the user to push enter.
+
+        Book book = this.literatureRegistry.bookSearch(bookTitle);
+
+        Boolean found = false;
+
+        if ( book != null )
+        {
+            found = this.literatureRegistry.addBookToSeries(seriesTitle, book );
+        }
+
+        if ( found )
+        {
+            System.out.println("Book does not exist.");
         }
     }
 
@@ -320,20 +324,22 @@ public class ApplicationUI
         // Asks for user input.
         System.out.println("Please enter the title of the book series " +
                 "\nwhere you want to return all books: ");
-        String title = this.scannerString();
+        String seriesTitle = this.scannerString();
 
         int numberOfBooks = 0;                  // Counts the number of books in the list.
-        HashMap<Book, String> bookSeriesList =  this.literatureRegistry.getBookSeriesList();
 
-        System.out.println("Books in book series" + title + " :");
+        Iterator<Literature> literatureListIt = this.literatureRegistry.getIteratorLiteratureList();
 
-        for ( Book book : bookSeriesList.keySet() )
+        while ( literatureListIt.hasNext() )
         {
-            if ( bookSeriesList.containsValue(title) )
+            Literature literature = literatureListIt.next();
+            if ( literatureListIt instanceof BookSeries )
             {
-                printBook(book);
-//                book.getTitle();
-                numberOfBooks++;
+                BookSeries bookSeries = (BookSeries) literatureListIt;
+                if ( bookSeries.getTitle().equals(seriesTitle))
+                {
+                    numberOfBooks++;
+                }
             }
         }
 
@@ -377,10 +383,12 @@ public class ApplicationUI
 
         while ( literatureListIt.hasNext() )
         {
-            Book book = this.literatureRegistry.bookSearch(author);
-            if ( book.getAuthor() != null )
+            Literature literature = literatureListIt.next();
+            if ( literature instanceof Book )
             {
-                if ( book.getAuthor().equals(author) )
+                Book book = (Book) literature;
+
+                if ( book.getAuthor() != null && book.getAuthor().equals(author) )
                 {
                     printBook(book);
                     numberOfBooks++;
@@ -461,7 +469,7 @@ public class ApplicationUI
             while (literatureListIt.hasNext())
             {
                 Literature literature = literatureListIt.next();
-                if ( this.literatureRegistry.isBook(literature) )
+                if ( literature instanceof Book )
                 {
                     Book book = (Book) literature;
                     this.printBookDetailed(book);
@@ -482,7 +490,7 @@ public class ApplicationUI
             while (literatureListIt.hasNext())
             {
                 Literature literature = literatureListIt.next();
-                if ( this.literatureRegistry.isBook(literature) )
+                if ( literature instanceof Book )
                 {
                     Book book = (Book) literature;
                     this.printBook(book);
