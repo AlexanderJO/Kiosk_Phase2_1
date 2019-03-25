@@ -211,7 +211,7 @@ public class ApplicationUI
         String datePublished = "";
         if (!isStringEmpty(edition))
         {
-            System.out.println("Please enter the publishing date of the book: ");
+            System.out.println("Please enter the publishing date of the book:  ");
             datePublished = scannerString();                     // Waits for the user to push enter.
         }
 
