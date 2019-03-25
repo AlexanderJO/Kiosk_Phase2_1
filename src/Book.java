@@ -19,18 +19,18 @@ public class Book extends Literature
     private final String author;
     private String edition;
     private String datePublished;
-
+    
     /**
      * Constructor for object of class Book.
      */
     public Book(String title, String publisher, String author, String edition, String datePublished)
     {
-        super(title, publisher);
+        setTitle(title);
+        setPublisher(publisher);
         this.author = author;
         this.edition = edition;
         this.datePublished = datePublished;
     }
-
     /**
      * Gets the author of the book.
      */

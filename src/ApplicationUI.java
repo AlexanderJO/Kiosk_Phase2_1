@@ -29,18 +29,21 @@ import java.util.Scanner;
  */
 public class ApplicationUI
 {
-
-
     // The menu that will be displayed. You can edit/alter the menu
     // to fit your application (i.e. replace "product" with "literature")
     // etc.
-    private String[] menuItems = {
+    private String[] mainMenu = {
             "1.  List all literature",
             "2.  Add new literature",
             "3.  Add book to series",
             "4.  Find literature by title",
             "5.  Remove a literature by title",
             "6.  Remove a book from series",
+    };
+    private String[] typeMenu = {
+            "1.  Book",
+            "2.  Book series",
+            "3.  Periodical"
     };
     private String[] menuTypes = {
             "1.  Book",
@@ -50,9 +53,11 @@ public class ApplicationUI
 
     private Registry registry;
 
-    private int typeBook;
-    private int typeSeries;
-    private int typePeriodical;
+    private Registry registry;
+
+    private final static int TYPE_BOOK = 1;
+    private final static int TYPE_SERIES = 2;
+    private final static int TYPE_PERIODICAL = 3;
 
     /**
      * This is the constructor of the ApplicationUI class.
@@ -62,10 +67,6 @@ public class ApplicationUI
     public ApplicationUI()
     {
         this.registry = new Registry();
-
-        typeBook = 0;
-        typeSeries = 1;
-        typePeriodical = 2;
     }
 
     /**
@@ -84,8 +85,9 @@ public class ApplicationUI
         {
             try
             {
-                this.showMenu(menuItems);
-                int menuSelection = this.menuInput(); // Read input from user
+                System.out.println(".....Main menu.....");
+                this.showMenu(mainMenu);
+                int menuSelection = this.menuInput(mainMenu); // Read input from user
 
                 switch (menuSelection)
                 {
@@ -123,7 +125,7 @@ public class ApplicationUI
                 }
             } catch (InputMismatchException ime)
             {
-                System.out.println("\nERROR: Please provide a number between 1 and " + (this.menuItems.length + 1) + ".\n");
+                printMenuError(mainMenu);
             }
         }
 
@@ -151,30 +153,33 @@ public class ApplicationUI
     private void addNewLiterature()
     {
         System.out.println("What type of literature do you want to make?");
-        showMenu(menuTypes);
-        int type = 0;
+        showMenu(typeMenu);
         try
         {
-            type = scannerInt();
+            int type = menuInput(typeMenu);
+            switch (type)
+            {
+                case TYPE_BOOK:
+                    addNewBook();
+                    break;
+
+                case TYPE_SERIES:
+                    addNewBookSeries();
+                    break;
+
+                case TYPE_PERIODICAL:
+                    addNewPeriodical();
+                    break;
+
+                case 4:
+                    System.out.println("Task was exited.");
+            }
         }
         catch (InputMismatchException ime)
         {
-            System.out.println("\nERROR: Please provide a number greater then 0.\n");
+            printMenuError(typeMenu);
         }
-        switch (type)
-        {
-            case 1:
-                addNewBook();
-                break;
 
-            case 2:
-                addNewBookSeries();
-                break;
-
-            case 3:
-                addNewPeriodical();
-                break;
-        }
 
     }
 
@@ -218,43 +223,8 @@ public class ApplicationUI
 
         if (!isStringEmpty(datePublished))
         {
-            registry.addBook(title, publisher, author, edition, datePublished);
+            registry.addLiterature(new Book(title, publisher, author, edition, datePublished));
             System.out.println("The book " + title + " was added to the register");
-//            System.out.println("Do you want to add this book to a series? [Yes/No]");
-//            String yesNo = scannerString().toLowerCase();                // Waits for the user to push enter.
-//
-//            if (yesNo.equals("yes"))
-//            {
-//                this.registry.addBook(title, publisher, author, edition, datePublished);
-//                Book book =(Book) registry.getLiteratureByTitle(title, typeBook);
-//
-//                System.out.println("Please enter the series of the book: ");
-//                String titleSeries = scannerString();
-//                if(registry.addBookToSeries(titleSeries, book))
-//                {
-//                    System.out.println(title + " was added to "+ titleSeries);
-//                    registry.removeBook(title);
-//                }
-//                else
-//                {
-//                    System.out.println("No series with that title found, do you want to make a new one? [Yes/No]");
-//                    String yesNoNew = scannerString().toLowerCase();
-//                    if (yesNoNew.equals("yes"))
-//                    {
-//                        addNewBookSeries();
-//                    }
-//                    if (yesNoNew.equals("no"))
-//                    {
-//                        System.out.println("The book "+title+" was added to the register");
-//                    }
-//                }
-//            }
-//
-//            if (yesNo.equals("no"))
-//            {
-//                this.registry.addBook(title, publisher, author, edition, datePublished);
-//                System.out.println("The book "+title+" was added to the register");
-//            }
         } else
         {
             System.out.println("Invalid book parameter, no book was made.");
@@ -277,10 +247,11 @@ public class ApplicationUI
             System.out.println("Please enter the publisher of the series: ");
             publisher = scannerString();                       // Waits for the user to push enter.
         }
+    }
 
         if (!isStringEmpty(publisher))
         {
-            this.registry.addBookSeries(title, publisher);                    // Waits for the user to push enter.
+            this.registry.addLiterature(new BookSeries(title, publisher));                    // Waits for the user to push enter.
         } else
         {
             System.out.println("Invalid series parameter, no series was made.");
@@ -295,7 +266,7 @@ public class ApplicationUI
 
         if (!isStringEmpty(titleBook))
         {
-            Book book = (Book) registry.getLiteratureByTitle(titleBook, typeBook);
+            Book book = (Book) registry.getLiteratureByTitle(titleBook, TYPE_BOOK);
             if (book != null)
             {
                 System.out.println("Please enter the title of the series: ");
@@ -357,7 +328,7 @@ public class ApplicationUI
 
         if (releases>0)
         {
-            registry.addPeriodical(title, publisher, genre, type, releases);
+            registry.addLiterature(new Periodical(title, publisher, genre, type, releases));
             System.out.println("The periodical " + title + " was added to the register");
         }
         else
@@ -366,32 +337,12 @@ public class ApplicationUI
         }
     }
 
-    /**
-     * Remove the book by title.
-     * Takes in string input from user.
-     */
-//    private void removeBookByTitle()
-//    {
-//        System.out.println("Please enter the title of the book that you want to remove: ");
-//        String title = scannerString();
-//        Book book = (Book) this.registry.getLiteratureByTitle(title, typeBook);
-//        if (book != null)
-//        {
-//            //this.registry.removeBook(title);
-//            System.out.println("You successfully removed " + book.getTitle() + ".");
-//        } else
-//        {
-//            System.out.println("No book with this title.");
-//        }
-//
-//    }
-
     private void removeLiteratureByTitle()
     {
         System.out.println("Please enter the title of the literature that you want to remove: ");
         String title = scannerString();
         System.out.println("Please enter the type of the literature that you want to remove: ");
-        this.showMenu(menuTypes);
+        this.showMenu(typeMenu);
         int type = 0;
         try
         {
@@ -427,13 +378,13 @@ public class ApplicationUI
         try
         {
 
-            this.showMenu(menuTypes);
-            int typeSelection = this.menuInput(); // Read input from user
+            this.showMenu(typeMenu);
+            int typeSelection = this.menuInput(typeMenu); // Read input from user
 
             switch (typeSelection)
             {
-                case 1:
-                    Book book = (Book) this.registry.getLiteratureByTitle(title, typeBook);
+                case TYPE_BOOK:
+                    Book book = (Book) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
                     if (book != null)
                     {
                         this.printLiterature(book);
@@ -444,8 +395,8 @@ public class ApplicationUI
                     }
                     break;
 
-                case 2:
-                    BookSeries bookSeries = (BookSeries) this.registry.getLiteratureByTitle(title, typeBook);
+                case TYPE_SERIES:
+                    BookSeries bookSeries = (BookSeries) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
                     if (bookSeries != null)
                     {
                         this.printLiterature(bookSeries);
@@ -456,8 +407,8 @@ public class ApplicationUI
                     }
                     break;
 
-                case 3:
-                    Periodical periodical = (Periodical) this.registry.getLiteratureByTitle(title, typeBook);
+                case TYPE_PERIODICAL:
+                    Periodical periodical = (Periodical) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
                     if (periodical != null)
                     {
                         this.printLiterature(periodical);
@@ -467,50 +418,20 @@ public class ApplicationUI
                         printNoLiterature();
                     }
                     break;
+
+                case 4:
+                    System.out.println("Task was exited.");
+                    break;
             }
         }
         catch (InputMismatchException ime)
         {
-            System.out.println("\nERROR: Please provide a number between 1 and " + (this.menuTypes.length + 1) + ".\n");
+            printMenuError(typeMenu);
         }
+
     }
 
-//    /**
-//     * List all books by author.
-//     * Takes in String input from user.
-//     */
-//    private void findBookByAuthor()
-//    {
-//        System.out.println("Please enter the author of the book you want to find: ");
-//        String author = scannerString();
-//        int numberOfBooks = 0;
-//
-//        Iterator<Literature> bookListIt = this.registry.getIterator();
-//
-//        while (bookListIt.hasNext())
-//        {
-//            Literature literature = bookListIt.next();
-//            Book book = (Book)literature;
-//            if ( book.getAuthor() != null )
-//            {
-//                if ( book.getAuthor().equals(author) )
-//                {
-//                    printLiterature(book);
-//                    numberOfBooks++;
-//                }
-//            }
-//        }
-//
-//        if (numberOfBooks == 0)
-//        {
-//            System.out.println("No books found by this author.");
-//        }
-//
-//        else
-//        {
-//            System.out.println("The number of books found: " + numberOfBooks);
-//        }
-//    }
+    // ---------------- Accessor Methods ---------------
 
     /**
      * Lists all the books in the register
@@ -552,26 +473,11 @@ public class ApplicationUI
 
     // ----------- Print Methods ---------------
 
-    /**
-     * Displays the menu to the user.
-     */
-//    private void showMenu()
-//    {
-//        int maxMenuItemNumber = menuItems.length + 1;
-//
-//        if (menuItems.length > 0)
-//        {
-//            System.out.println("\n**** Application v0.2 ****\n");
-//            // Display the menu
-//            for (String menuItem : menuItems)
-//            {
-//                System.out.println(menuItem);
-//            }
-//            // Add the "Exit"-choice to the menu
-//            System.out.println(maxMenuItemNumber + ". Exit\n");
-//            System.out.println("Please choose menu item (1-" + maxMenuItemNumber + "): ");
-//        }
-//    }
+    private void printMenuError(String[] menu)
+    {
+        System.out.println("\nERROR: Please provide a number between 1 and " + (menu.length + 1) + ".\n");
+    }
+
 
     /**
      * Displays the menu to the user.
@@ -703,9 +609,9 @@ public class ApplicationUI
      * @return the menu number (between 1 and max menu item number) provided by the user.
      * @throws InputMismatchException if user enters an invalid number/menu choice
      */
-    private int menuInput() throws InputMismatchException
+    private int menuInput(String[] menu) throws InputMismatchException
     {
-        int maxMenuItemNumber = menuItems.length + 1;
+        int maxMenuItemNumber = menu.length + 1;
         int menuSelection = scannerInt();
         if ((menuSelection < 1) || (menuSelection > maxMenuItemNumber))
         {
