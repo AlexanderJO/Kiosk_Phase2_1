@@ -110,7 +110,7 @@ public class ApplicationUI
                         break;
 
                     case 6:
-                        //this.removeBookFromSeries();
+                        this.removeBookFromSeries();
                         break;
 
                     case 7:
@@ -220,42 +220,9 @@ public class ApplicationUI
         {
             registry.addBook(title, publisher, author, edition, datePublished);
             System.out.println("The book " + title + " was added to the register");
-//            System.out.println("Do you want to add this book to a series? [Yes/No]");
-//            String yesNo = scannerString().toLowerCase();                // Waits for the user to push enter.
-//
-//            if (yesNo.equals("yes"))
-//            {
-//                this.registry.addBook(title, publisher, author, edition, datePublished);
-//                Book book =(Book) registry.getLiteratureByTitle(title, typeBook);
-//
-//                System.out.println("Please enter the series of the book: ");
-//                String titleSeries = scannerString();
-//                if(registry.addBookToSeries(titleSeries, book))
-//                {
-//                    System.out.println(title + " was added to "+ titleSeries);
-//                    registry.removeBook(title);
-//                }
-//                else
-//                {
-//                    System.out.println("No series with that title found, do you want to make a new one? [Yes/No]");
-//                    String yesNoNew = scannerString().toLowerCase();
-//                    if (yesNoNew.equals("yes"))
-//                    {
-//                        addNewBookSeries();
-//                    }
-//                    if (yesNoNew.equals("no"))
-//                    {
-//                        System.out.println("The book "+title+" was added to the register");
-//                    }
-//                }
-//            }
-//
-//            if (yesNo.equals("no"))
-//            {
-//                this.registry.addBook(title, publisher, author, edition, datePublished);
-//                System.out.println("The book "+title+" was added to the register");
-//            }
-        } else
+        }
+
+        else
         {
             System.out.println("Invalid book parameter, no book was made.");
         }
@@ -287,7 +254,6 @@ public class ApplicationUI
         }
     }
 
-
     private void addBookToSeries()
     {
         System.out.println("Please enter the title of the book: ");
@@ -311,6 +277,40 @@ public class ApplicationUI
         } else
         {
             System.out.println("Book was not added");
+        }
+    }
+
+    private void removeBookFromSeries()
+    {
+        System.out.println("Please enter the title of the book: ");
+        String titleBook = scannerString();
+
+        if ( !isStringEmpty(titleBook))
+        {
+            Book book = (Book) registry.getLiteratureByTitle(titleBook, typeBook);
+
+            if ( book != null )
+            {
+                System.out.println("Please enter the title of the series: ");
+                String titleSeries = scannerString();
+                if ( registry.removeBookFromSeries(titleSeries, book))
+                {
+                    System.out.println(titleBook + " was removed from " + titleSeries);
+                }
+                else
+                {
+                    System.out.println("Book was not removed");
+                }
+            }
+
+            else
+            {
+                System.out.println("Book was not removed");
+            }
+        }
+        else
+        {
+            System.out.println("Book was not removed");
         }
     }
 
@@ -393,6 +393,7 @@ public class ApplicationUI
         System.out.println("Please enter the type of the literature that you want to remove: ");
         this.showMenu(menuTypes);
         int type = 0;
+
         try
         {
             type = scannerInt();
@@ -401,7 +402,9 @@ public class ApplicationUI
         {
             System.out.println("\nERROR: Please provide a number greater then 0.\n");
         }
+
         Literature literature = this.registry.getLiteratureByTitle(title, type);
+
         if(literature != null)
         {
             this.registry.removeLiterature(literature);

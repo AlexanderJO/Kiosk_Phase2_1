@@ -6,7 +6,8 @@ public class Periodical extends Literature
 
     public Periodical(String title, String publisher, String genre, String type, int releases)
     {
-        super(title, publisher);
+        setTitle(title);
+        setPublisher(publisher);
         this.genre = genre;
         this.type = type;
         this.releases = releases;
