@@ -1,25 +1,25 @@
 /**
  * Represents a book, holding information about the book.
- * Book class inherits data from Literature class.
  *
  * In this book class you can:
  * <ul>
+ * <li> get name of book </li>
+ * <li> get publisher of book </li>
  * <li> get author of book </li>
  * <li> get edition of book </li>
  * <li> get publish date of book </li>
- * 
+ *
  * @author      Alexander J. Overvåg, Sondre Nerhus, Gustav S. Hagen
- * @version     v1.0 (beta) 2019.02.13
+ * @version     v2.0 (beta) 2019.03.06
  */
 
 public class Book extends Literature
 {
-    // ------------------- Fields ----------------
+    // Fields
     private final String author;
     private String edition;
     private String datePublished;
 
-    // ------------------- Constructor ----------------
     /**
      * Constructor for object of class Book.
      */
@@ -31,7 +31,6 @@ public class Book extends Literature
         this.datePublished = datePublished;
     }
 
-    // ------------------- Methods ----------------
     /**
      * Gets the author of the book.
      */
@@ -39,7 +38,7 @@ public class Book extends Literature
     {
         return this.author;
     }
-    
+
     /**
      * Gets the edition of the book.
      */
@@ -47,7 +46,7 @@ public class Book extends Literature
     {
         return this.edition;
     }
-    
+
     /**
      * Gets the date published for the book.
      */
