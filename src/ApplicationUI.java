@@ -469,7 +469,7 @@ public class ApplicationUI
             while (literatureListIt.hasNext())
             {
                 Literature literature = literatureListIt.next();
-                if ( this.literatureRegistry.isBook(literature) )
+                if ( literature instanceof Book )
                 {
                     Book book = (Book) literature;
                     this.printBookDetailed(book);
@@ -490,7 +490,7 @@ public class ApplicationUI
             while (literatureListIt.hasNext())
             {
                 Literature literature = literatureListIt.next();
-                if ( this.literatureRegistry.isBook(literature) )
+                if ( literature instanceof Book )
                 {
                     Book book = (Book) literature;
                     this.printBook(book);

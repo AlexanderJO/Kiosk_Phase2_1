@@ -176,23 +176,6 @@ public class Registry
     }
 
     /**
-     * Checks if the literature is book.
-     * Returns true if book, false otherwise.
-     * @return true if book, false otherwise.
-     */
-    public boolean isBook(Literature literature)
-    {
-        boolean isBook = false;
-
-        if ( literature instanceof Book )
-        {
-            isBook = true;
-        }
-
-        return isBook;
-    }
-
-    /**
      * Checks if the literature is periodical.
      * Returns true if periodical, false otherwise.
      * @return true if periodical, false otherwise.
