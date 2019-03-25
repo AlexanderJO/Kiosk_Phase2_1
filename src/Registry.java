@@ -42,33 +42,16 @@ public class Registry
 
     /**
      * Create book to the literatureList.
-     *
-     * @param title         Title of the book.
-     * @param publisher     Publisher of the book.
-     * @param author        Author of the book.
-     * @param edition       Edition of the book (Ex. Sixth Edition or 6th. Edition)
-     * @param datePublished Publish date of the book.
+     * @param literature Literature to be added.
      */
-    public void addBook(String title, String publisher, String author,
-                        String edition, String datePublished)
+    public void addLiterature(Literature literature)
     {
-        literatureList.add(new Book(title, publisher, author, edition, datePublished) );
-    }
-
-    public void addBookSeries(String title, String publisher)
-    {
-        literatureList.add(new BookSeries(title, publisher));
-    }
-
-    public void addPeriodical(String title, String publisher, String genre, String type, int releases)
-    {
-        literatureList.add(new Periodical(title, publisher, genre, type, releases));
+        literatureList.add(literature);
     }
 
     /**
      * Removes the literature by using a given literature.
-     *
-     * @param literature    Literature to be removed.
+     * @param literature Literature to be removed.
      */
     public void removeLiterature(Literature literature)
     {
