@@ -37,15 +37,11 @@ public class ApplicationUI
     // etc.
     private String[] menuItems = {
             "1.  List all literature",
-            "2.  Add new book",
-            "3.  Add new series",
-            "4.  Add book to series",
-            "5.  Add new periodical",
-            "6.  Find literature by title",
-            "9.  Remove a book by title",
-            "10.  Remove a book from series",
-            "11. Remove a series",
-            "12. Remove a periodical"
+            "2.  Add new literature",
+            "3.  Add book to series",
+            "4.  Find literature by title",
+            "5.  Remove a literature by title",
+            "6.  Remove a book from series",
     };
     private String[] menuTypes = {
             "1.  Book",
@@ -81,7 +77,7 @@ public class ApplicationUI
     {
         this.init();
 
-        this.registry.fillBookListWithDummies();
+
 
         boolean quit = false;
 
@@ -89,7 +85,7 @@ public class ApplicationUI
         {
             try
             {
-                this.showMenu();
+                this.showMenu(menuItems);
                 int menuSelection = this.menuInput(); // Read input from user
 
                 switch (menuSelection)
@@ -99,42 +95,26 @@ public class ApplicationUI
                         break;
 
                     case 2:
-                        this.addNewBook();
+                        this.addNewLiterature();
                         break;
 
                     case 3:
-                        this.addNewBookSeries();
-                        break;
-
-                    case 4:
                         this.addBookToSeries();
                         break;
 
-                    case 5:
-                        this.addNewPeriodical();
-                        break;
-
-                    case 6:
+                    case 4:
                         this.findLiteratureByTitle();
                         break;
 
-                    case 7:
+                    case 5:
                         this.removeLiteratureByTitle();
                         break;
 
-                    case 8:
+                    case 6:
                         //this.removeBookFromSeries();
                         break;
 
-                    case 9:
-                        //this.removeSeriesByTitle();
-                        break;
-
-                    case 10:
-                        //this.removePeriodicalByTitle();
-                        break;
-
-                    case 11:
+                    case 7:
                         System.out.println("\nThank you for using Application v0.1. Bye!\n");
                         quit = true;
                         break;
@@ -159,10 +139,45 @@ public class ApplicationUI
      */
     private void init()
     {
-        System.out.println("init() was called");
+        this.registry.fillBookListWithDummies();
+        System.out.println("Dummies was made for testing");
     }
 
     // --------- Mutator Methods -------------
+
+    /**
+     * Adds a new literature to the register
+     * by choosing the type of literature.
+     */
+    private void addNewLiterature()
+    {
+        System.out.println("What type of literature do you want to make?");
+        showMenu(menuTypes);
+        int type = 0;
+        try
+        {
+            type = scannerInt();
+        }
+        catch (InputMismatchException ime)
+        {
+            System.out.println("\nERROR: Please provide a number greater then 0.\n");
+        }
+        switch (type)
+        {
+            case 1:
+                addNewBook();
+                break;
+
+            case 2:
+                addNewBookSeries();
+                break;
+
+            case 3:
+                addNewPeriodical();
+                break;
+        }
+
+    }
 
     /**
      * Add a new book to the register by
@@ -377,7 +392,7 @@ public class ApplicationUI
         System.out.println("Please enter the title of the literature that you want to remove: ");
         String title = scannerString();
         System.out.println("Please enter the type of the literature that you want to remove: ");
-        this.showType();
+        this.showMenu(menuTypes);
         int type = 0;
         try
         {
@@ -409,9 +424,11 @@ public class ApplicationUI
     {
         System.out.println("Please enter title of the literature you want to find: ");
         String title = scannerString();
+        System.out.println("What literature do you want to find?");
         try
         {
-            this.showType();
+
+            this.showMenu(menuTypes);
             int typeSelection = this.menuInput(); // Read input from user
 
             switch (typeSelection)
@@ -539,39 +556,40 @@ public class ApplicationUI
     /**
      * Displays the menu to the user.
      */
-    private void showMenu()
-    {
-        int maxMenuItemNumber = menuItems.length + 1;
-
-        if (menuItems.length > 0)
-        {
-            System.out.println("\n**** Application v0.2 ****\n");
-            // Display the menu
-            for (String menuItem : menuItems)
-            {
-                System.out.println(menuItem);
-            }
-            // Add the "Exit"-choice to the menu
-            System.out.println(maxMenuItemNumber + ". Exit\n");
-            System.out.println("Please choose menu item (1-" + maxMenuItemNumber + "): ");
-        }
-    }
+//    private void showMenu()
+//    {
+//        int maxMenuItemNumber = menuItems.length + 1;
+//
+//        if (menuItems.length > 0)
+//        {
+//            System.out.println("\n**** Application v0.2 ****\n");
+//            // Display the menu
+//            for (String menuItem : menuItems)
+//            {
+//                System.out.println(menuItem);
+//            }
+//            // Add the "Exit"-choice to the menu
+//            System.out.println(maxMenuItemNumber + ". Exit\n");
+//            System.out.println("Please choose menu item (1-" + maxMenuItemNumber + "): ");
+//        }
+//    }
 
     /**
      * Displays the menu to the user.
      */
-    private void showType()
+    private void showMenu(String[] menu)
     {
-        int maxMenuItemNumber = menuTypes.length + 1;
+        int maxMenuItemNumber = menu.length + 1;
 
-        if (menuTypes.length > 0)
+        if (menu.length > 0)
         {
-            System.out.println("What literature do you want to find?");
+
             // Display the menu
-            for (String menuType : menuTypes)
+            for (String menuChoice : menu)
             {
-                System.out.println(menuType);
+                System.out.println(menuChoice);
             }
+            System.out.println(maxMenuItemNumber + ". Exit\n");
             System.out.println("Please choose a number from (1-" + maxMenuItemNumber + "): ");
         }
     }
