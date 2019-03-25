@@ -45,11 +45,6 @@ public class ApplicationUI
             "2.  Book series",
             "3.  Periodical"
     };
-    private String[] menuTypes = {
-            "1.  Book",
-            "2.  Book series",
-            "3.  Periodical"
-    };
 
     private Registry registry;
 
@@ -525,7 +520,7 @@ public class ApplicationUI
             {
                 System.out.println(menuChoice);
             }
-            System.out.println(maxMenuItemNumber + ". Exit\n");
+            System.out.println(maxMenuItemNumber + ".  Exit\n");
             System.out.println("Please choose a number from (1-" + maxMenuItemNumber + "): ");
         }
     }
@@ -643,10 +638,25 @@ public class ApplicationUI
     private int menuInput(String[] menu) throws InputMismatchException
     {
         int maxMenuItemNumber = menu.length + 1;
-        int menuSelection = scannerInt();
-        if ((menuSelection < 1) || (menuSelection > maxMenuItemNumber))
+        int menuSelection = 0;
+        int count = 1;
+        boolean validInt = false;
+        while(!validInt)
         {
-            throw new InputMismatchException();
+            menuSelection = scannerInt();
+            if ((menuSelection < 1) || (menuSelection > maxMenuItemNumber))
+            {
+                if (count>2)
+                {
+                    throw new InputMismatchException();
+                }
+                System.out.println("Please enter a number between 1 and "+ maxMenuItemNumber);
+            }
+            else
+            {
+                validInt = true;
+            }
+            count++;
         }
         return menuSelection;
     }
