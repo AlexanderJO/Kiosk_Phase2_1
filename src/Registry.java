@@ -75,30 +75,6 @@ public class Registry
         literatureList.remove(literature);
     }
 
-//    /**
-//     * Adds a book to a series.
-//     *
-//     * @param title     Title of the book to be added.
-//     * @param series    Series of the book to be added.
-//     */
-//    public void addBookToSeries(String title, String series)
-//    {
-//        boolean found = false;
-//        int index = 0;
-//        while ( ( index < this.literatureList.size() ) && !found )
-//        {
-//            Literature literature = this.literatureList.get(index);
-//
-//            if ( literature.getTitle().equals(title) )
-//            {
-//                BookSeries bookSeries = (BookSeries) literature;
-//                bookSeries.addBookToSeries(new Book());
-//                found = true;
-//            }
-//            index++;
-//        }
-//    }
-
     /**
      * Adds a book to a series chosen by title
      * @param title The title of the series
@@ -162,7 +138,7 @@ public class Registry
             Literature literature = literatureIt.next();
             switch (type)
             {
-                case 0:
+                case 1:
                     if(literature instanceof Book)
                     {
                         if(literature.getTitle().equals(title))
@@ -172,7 +148,7 @@ public class Registry
                     }
                     break;
 
-                case 1:
+                case 2:
                     if(literature instanceof BookSeries)
                     {
                         if(literature.getTitle().equals(title))
@@ -182,7 +158,7 @@ public class Registry
                     }
                     break;
 
-                case 2:
+                case 3:
                     if(literature instanceof Periodical)
                     {
                         if(literature.getTitle().equals(title))
