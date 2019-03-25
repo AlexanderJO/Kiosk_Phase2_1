@@ -1,4 +1,3 @@
-
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -42,6 +41,11 @@ public class ApplicationUI
             "6.  Remove a book from series",
     };
     private String[] typeMenu = {
+            "1.  Book",
+            "2.  Book series",
+            "3.  Periodical"
+    };
+    private String[] menuTypes = {
             "1.  Book",
             "2.  Book series",
             "3.  Periodical"
@@ -106,7 +110,7 @@ public class ApplicationUI
                         break;
 
                     case 6:
-                        //this.removeBookFromSeries();
+                        this.removeBookFromSeries();
                         break;
 
                     case 7:
@@ -278,6 +282,40 @@ public class ApplicationUI
         }
     }
 
+    private void removeBookFromSeries()
+    {
+        System.out.println("Please enter the title of the book: ");
+        String titleBook = scannerString();
+
+        if ( !isStringEmpty(titleBook))
+        {
+            Book book = (Book) registry.getLiteratureByTitle(titleBook, TYPE_BOOK);
+
+            if ( book != null )
+            {
+                System.out.println("Please enter the title of the series: ");
+                String titleSeries = scannerString();
+                if ( registry.removeBookFromSeries(titleSeries, book))
+                {
+                    System.out.println(titleBook + " was removed from " + titleSeries);
+                }
+                else
+                {
+                    System.out.println("Book was not removed");
+                }
+            }
+
+            else
+            {
+                System.out.println("Book was not removed");
+            }
+        }
+        else
+        {
+            System.out.println("Book was not removed");
+        }
+    }
+
     private void addNewPeriodical()
     {
         System.out.println("Please enter the title of the periodical: ");
@@ -421,7 +459,10 @@ public class ApplicationUI
         {
             printMenuError(typeMenu);
         }
+
     }
+
+    // ---------------- Accessor Methods ---------------
 
     /**
      * Lists all the books in the register

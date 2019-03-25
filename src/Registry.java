@@ -18,7 +18,7 @@ import java.util.ArrayList;
  *  *  <li>    List and get all books by publisher </li>
  *  *  <li>    List and get all books in series </li>
  *  *  </ul>
- * 
+ *
  * The object Book contains the parameters Title, Author, Publisher, Date published, Edition and Series.
  *
  *  @author     Alexander J. Overvåg, Sondre Nerhus, Gustav S. Hagen
@@ -42,33 +42,16 @@ public class Registry
 
     /**
      * Create book to the literatureList.
-     * 
-     * @param title         Title of the book.
-     * @param publisher     Publisher of the book.
-     * @param author        Author of the book.
-     * @param edition       Edition of the book (Ex. Sixth Edition or 6th. Edition)
-     * @param datePublished Publish date of the book.
-     */    
-    public void addBook(String title, String publisher, String author,
-    String edition, String datePublished)
+     * @param literature Literature to be added.
+     */
+    public void addLiterature(Literature literature)
     {
-        literatureList.add(new Book(title, publisher, author, edition, datePublished) );
-    }
-
-    public void addBookSeries(String title, String publisher)
-    {
-        literatureList.add(new BookSeries(title, publisher));
-    }
-
-    public void addPeriodical(String title, String publisher, String genre, String type, int releases)
-    {
-        literatureList.add(new Periodical(title, publisher, genre, type, releases));
+        literatureList.add(literature);
     }
 
     /**
      * Removes the literature by using a given literature.
-     * 
-     * @param literature    Literature to be removed.
+     * @param literature Literature to be removed.
      */
     public void removeLiterature(Literature literature)
     {
@@ -101,8 +84,36 @@ public class Registry
     }
 
     /**
+     * Removes a book from a series chosen by title.
+     * @param title The title of the series.
+     * @param book The book you want to remove from the series.
+     */
+    public boolean removeBookFromSeries(String title, Book book)
+    {
+        Boolean found = false;
+        Iterator<Literature> literatureIt = literatureList.iterator();
+
+        while ( literatureIt.hasNext() )
+        {
+            Literature literature = literatureIt.next();
+
+            if ( literature instanceof BookSeries)
+            {
+                BookSeries bookSeries = (BookSeries) literature;
+
+                if ( bookSeries.getTitle().equals(title))
+                {
+                    bookSeries.removeBookFromSeries(book);
+                    found = true;
+                }
+            }
+        }
+        return found;
+    }
+
+    /**
      * Return book by title. Title is assumed to be unique.
-     * 
+     *
      * @param title Title of the book.
      * @return Return book by title.
      */
@@ -182,6 +193,8 @@ public class Registry
 
     public void fillBookListWithDummies()
     {
+        Book book1 = new Book("Book 2", "Publisher 1", "Author 1", "First Edition", "2019.01.01");
+        this.literatureList.add(book1);
         this.literatureList.add(new Book("Book 6", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
         this.literatureList.add(new Book("Book 7", "Publisher 1", "Author 5", "Second Edition", "2019.01.02"));
         this.literatureList.add(new Book("Book 8", "Publisher 2", "Author 1", "First Edition", "2019.01.05"));
@@ -191,10 +204,10 @@ public class Registry
         BookSeries bookSeries = new BookSeries("BookSeries 10", "BOiiii");
         this.literatureList.add(bookSeries);
         bookSeries.addBookToSeries(new Book("Book 1", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
-        bookSeries.addBookToSeries(new Book("Book 2", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
+        bookSeries.addBookToSeries(book1);
         bookSeries.addBookToSeries(new Book("Book 3", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
         bookSeries.addBookToSeries(new Book("Book 4", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
-        bookSeries.addBookToSeries(new Book("Book 51", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
+        bookSeries.addBookToSeries(new Book("Book 5", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
 
         this.literatureList.add(new Periodical("Mor Di", "Anibalus", "Sport", "Magazine", 100));
         this.literatureList.add(new Periodical("Dagens hete nytt", "VG", "Sladder", "Avise", 100));
