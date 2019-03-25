@@ -53,8 +53,6 @@ public class ApplicationUI
 
     private Registry registry;
 
-    private Registry registry;
-
     private final static int TYPE_BOOK = 1;
     private final static int TYPE_SERIES = 2;
     private final static int TYPE_PERIODICAL = 3;
@@ -112,7 +110,7 @@ public class ApplicationUI
                         break;
 
                     case 6:
-                        //this.removeBookFromSeries();
+                        this.removeBookFromSeries();
                         break;
 
                     case 7:
@@ -247,7 +245,6 @@ public class ApplicationUI
             System.out.println("Please enter the publisher of the series: ");
             publisher = scannerString();                       // Waits for the user to push enter.
         }
-    }
 
         if (!isStringEmpty(publisher))
         {
@@ -282,6 +279,40 @@ public class ApplicationUI
         } else
         {
             System.out.println("Book was not added");
+        }
+    }
+
+    private void removeBookFromSeries()
+    {
+        System.out.println("Please enter the title of the book: ");
+        String titleBook = scannerString();
+
+        if ( !isStringEmpty(titleBook))
+        {
+            Book book = (Book) registry.getLiteratureByTitle(titleBook, TYPE_BOOK);
+
+            if ( book != null )
+            {
+                System.out.println("Please enter the title of the series: ");
+                String titleSeries = scannerString();
+                if ( registry.removeBookFromSeries(titleSeries, book))
+                {
+                    System.out.println(titleBook + " was removed from " + titleSeries);
+                }
+                else
+                {
+                    System.out.println("Book was not removed");
+                }
+            }
+
+            else
+            {
+                System.out.println("Book was not removed");
+            }
+        }
+        else
+        {
+            System.out.println("Book was not removed");
         }
     }
 
