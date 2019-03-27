@@ -170,7 +170,17 @@ public class Registry
                     break;
 
                 case 3:
-                    if(literature instanceof Periodical)
+                    if(literature instanceof Newspaper)
+                    {
+                        if(literature.getTitle().equals(title))
+                        {
+                            return literature;
+                        }
+                    }
+                    break;
+
+                case 4:
+                    if(literature instanceof Magazine)
                     {
                         if(literature.getTitle().equals(title))
                         {
@@ -191,6 +201,9 @@ public class Registry
         return this.literatureList.iterator();
     }
 
+    /**
+     *
+     */
     public void fillBookListWithDummies()
     {
         Book book1 = new Book("Book 2", "Publisher 1", "Author 1", "First Edition", "2019.01.01");
@@ -209,7 +222,7 @@ public class Registry
         bookSeries.addBookToSeries(new Book("Book 4", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
         bookSeries.addBookToSeries(new Book("Book 5", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
 
-        this.literatureList.add(new Periodical("Mor Di", "Anibalus", "Sport", "Magazine", 100));
-        this.literatureList.add(new Periodical("Dagens hete nytt", "VG", "Sladder", "Avise", 100));
+        this.literatureList.add(new Magazine("Mor Di", "Anibalus", "Sport", 100));
+        this.literatureList.add(new Newspaper("Dagens hete nytt", "VG", "Daily news and sladder",100));
     }
 }
