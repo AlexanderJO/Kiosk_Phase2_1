@@ -1,30 +1,27 @@
-public class Periodical extends Literature
+public abstract class Periodical extends Literature
 {
     private String genre;
-    private String type;
     private int releases;
 
-    public Periodical(String title, String publisher, String genre, String type, int releases)
+    public Periodical(String title, String publisher, String genre, int releases)
     {
         setTitle(title);
         setPublisher(publisher);
         this.genre = genre;
-        this.type = type;
         this.releases = releases;
     }
 
-    public String getGenre()
-    {
-        return genre;
-    }
-
-    public String getType()
-    {
-        return type;
-    }
-
-    public int getReleases()
+    /**
+     * Returns the releases of the periodical.
+     * @return the releases of the periodical.
+     */
+    protected int getReleases()
     {
         return releases;
+    }
+
+    protected String getGenre()
+    {
+        return this.genre;
     }
 }
