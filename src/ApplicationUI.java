@@ -45,11 +45,6 @@ public class ApplicationUI
             "2.  Book series",
             "3.  Periodical"
     };
-    private String[] menuTypes = {
-            "1.  Book",
-            "2.  Book series",
-            "3.  Periodical"
-    };
 
     private Registry registry;
 
