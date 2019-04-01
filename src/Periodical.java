@@ -20,11 +20,11 @@ public abstract class Periodical extends Literature
      */
     public String getGenre()
     {
-        return genre;
+        return this.genre;
     }
 
     public int getReleases()
     {
-        return this.genre;
+        return this.releases;
     }
 }
