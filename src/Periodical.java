@@ -3,6 +3,9 @@ public abstract class Periodical extends Literature
     private String genre;
     private int releases;
 
+    /**
+     * Constructor for the Periodical class.
+     */
     public Periodical(String title, String publisher, String genre, int releases)
     {
         setTitle(title);
@@ -12,15 +15,15 @@ public abstract class Periodical extends Literature
     }
 
     /**
-     * Returns the releases of the periodical.
-     * @return the releases of the periodical.
+     * Returns the genre of the periodical.
+     * @return The genre of the periodical.
      */
-    protected int getReleases()
+    public String getGenre()
     {
-        return releases;
+        return genre;
     }
 
-    protected String getGenre()
+    public int getReleases()
     {
         return this.genre;
     }
