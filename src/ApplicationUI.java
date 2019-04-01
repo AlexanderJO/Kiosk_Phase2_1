@@ -371,8 +371,6 @@ public class ApplicationUI
 
     private void removeLiteratureByTitle()
     {
-        System.out.println("Please enter the title of the literature that you want to remove: ");
-        String title = scannerString();
         System.out.println("Please enter the type of the literature that you want to remove: ");
         this.showMenu(typeMenu);
         int type = 0;
@@ -384,17 +382,28 @@ public class ApplicationUI
         {
             System.out.println("\nERROR: Please provide a number greater then 0.\n");
         }
-        Literature literature = this.registry.getLiteratureByTitle(title, type);
-        if(literature != null)
+
+        if ( type == typeMenu.length + 1)
         {
-            this.registry.removeLiterature(literature);
-            System.out.println(title+" was removed");
-        }
-        else
-        {
-            System.out.println("No book with this title.");
+            System.out.println("You've exited the search.");
         }
 
+        else
+        {
+            System.out.println("Please enter the title of the literature that you want to remove: ");
+            String title = scannerString();
+
+            Literature literature = this.registry.getLiteratureByTitle(title, type);
+            if(literature != null)
+            {
+                this.registry.removeLiterature(literature);
+                System.out.println(title+" was removed");
+            }
+            else
+            {
+                System.out.println("No book with this title.");
+            }
+        }
     }
 
     // ---------------- Accessor Methods ---------------
@@ -440,8 +449,20 @@ public class ApplicationUI
                     break;
 
                 case TYPE_NEWSPAPER:
-                    Periodical periodical = (Periodical) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
-                    if (periodical != null)
+                    Periodical newspaper = (Periodical) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
+                    if (newspaper != null)
+                    {
+                        this.printLiterature(newspaper);
+                    }
+                    else
+                    {
+                        printNoLiterature();
+                    }
+                    break;
+
+                case TYPE_MAGAZINE:
+                    Periodical magazine = (Periodical) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
+                    if (magazine != null)
                     {
                         this.printLiterature(magazine);
                     }
