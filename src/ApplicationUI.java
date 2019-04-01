@@ -43,21 +43,16 @@ public class ApplicationUI
     private String[] typeMenu = {
             "1.  Book",
             "2.  Book series",
-            "3.  Periodical"
+            "3.  Newspaper",
+            "4.  Magazine"
     };
-    private String[] menuTypes = {
-            "1.  Book",
-            "2.  Book series",
-            "3.  Periodical"
-    };
-
-    private Registry registry;
 
     private Registry registry;
 
     private final static int TYPE_BOOK = 1;
     private final static int TYPE_SERIES = 2;
-    private final static int TYPE_PERIODICAL = 3;
+    private final static int TYPE_NEWSPAPER = 3;
+    private final static int TYPE_MAGAZINE = 4;
 
     /**
      * This is the constructor of the ApplicationUI class.
@@ -77,15 +72,13 @@ public class ApplicationUI
     {
         this.init();
 
-
-
         boolean quit = false;
 
         while (!quit)
         {
             try
             {
-                System.out.println(".....Main menu.....");
+                System.out.println("----- Main menu -----");
                 this.showMenu(mainMenu);
                 int menuSelection = this.menuInput(mainMenu); // Read input from user
 
@@ -112,7 +105,7 @@ public class ApplicationUI
                         break;
 
                     case 6:
-                        //this.removeBookFromSeries();
+                        this.removeBookFromSeries();
                         break;
 
                     case 7:
@@ -167,11 +160,15 @@ public class ApplicationUI
                     addNewBookSeries();
                     break;
 
-                case TYPE_PERIODICAL:
-                    addNewPeriodical();
+                case TYPE_NEWSPAPER:
+                    addNewPeriodical(TYPE_NEWSPAPER);
                     break;
 
-                case 4:
+                case TYPE_MAGAZINE:
+                    addNewPeriodical(TYPE_MAGAZINE);
+                    break;
+
+                case 5:
                     System.out.println("Task was exited.");
             }
         }
@@ -179,8 +176,6 @@ public class ApplicationUI
         {
             printMenuError(typeMenu);
         }
-
-
     }
 
     /**
@@ -247,7 +242,6 @@ public class ApplicationUI
             System.out.println("Please enter the publisher of the series: ");
             publisher = scannerString();                       // Waits for the user to push enter.
         }
-    }
 
         if (!isStringEmpty(publisher))
         {
@@ -258,7 +252,11 @@ public class ApplicationUI
         }
     }
 
-
+    /**
+     * Adds a book to series.
+     * Asks for user input for title of book
+     * and title of series.
+     */
     private void addBookToSeries()
     {
         System.out.println("Please enter the title of the book: ");
@@ -285,36 +283,63 @@ public class ApplicationUI
         }
     }
 
-    private void addNewPeriodical()
+    private void removeBookFromSeries()
     {
-        System.out.println("Please enter the title of the periodical: ");
+        System.out.println("Please enter the title of the book: ");
+        String titleBook = scannerString();
+
+        if ( !isStringEmpty(titleBook))
+        {
+            Book book = (Book) registry.getLiteratureByTitle(titleBook, TYPE_BOOK);
+
+            if ( book != null )
+            {
+                System.out.println("Please enter the title of the series: ");
+                String titleSeries = scannerString();
+                if ( registry.removeBookFromSeries(titleSeries, book))
+                {
+                    System.out.println(titleBook + " was removed from " + titleSeries);
+                }
+                else
+                {
+                    System.out.println("Book was not removed");
+                }
+            }
+
+            else
+            {
+                System.out.println("Book was not removed");
+            }
+        }
+        else
+        {
+            System.out.println("Book was not removed");
+        }
+    }
+
+    private void addNewPeriodical(int type)
+    {
+        System.out.println("Please enter the title: ");
         String title = scannerString();                       // Waits for the user to push enter.
 
         String publisher = "";
         if (!isStringEmpty(title))
         {
-            System.out.println("Please enter the publisher of the periodical: ");
+            System.out.println("Please enter the publisher: ");
             publisher = scannerString();                       // Waits for the user to push enter.
         }
 
         String genre = "";
         if (!isStringEmpty(publisher))
         {
-            System.out.println("Please enter the genre of the periodical: ");
+            System.out.println("Please enter the genre: ");
             genre = scannerString();                      // Waits for the user to push enter.
         }
 
-        String type = "";
+        int releases = 0;
         if (!isStringEmpty(genre))
         {
-            System.out.println("Please enter the type of the periodical: ");
-            type = scannerString();                     // Waits for the user to push enter.
-        }
-
-        int releases = 0;
-        if (!isStringEmpty(type))
-        {
-            System.out.println("Please enter the number of releases of the periodical: ");
+            System.out.println("Please enter the number of releases: ");
             try
             {
                 releases = scannerInt();
@@ -323,17 +348,24 @@ public class ApplicationUI
             {
                 System.out.println("\nERROR: Please provide a number greater then 0.\n");
             }
-
         }
 
         if (releases>0)
         {
-            registry.addLiterature(new Periodical(title, publisher, genre, type, releases));
-            System.out.println("The periodical " + title + " was added to the register");
+            if(TYPE_NEWSPAPER == type)
+            {
+                registry.addLiterature(new Newspaper(title, publisher, genre, releases));
+                System.out.println("The newspaper " + title + " was added to the register");
+            }
+            if(TYPE_MAGAZINE == type)
+            {
+                registry.addLiterature(new Magazine(title, publisher, genre, releases));
+                System.out.println("The magazine " + title + " was added to the register");
+            }
         }
         else
         {
-            System.out.println("Invalid periodical parameter, no periodical was made");
+            System.out.println("Invalid parameter, no periodical was made");
         }
     }
 
@@ -372,14 +404,14 @@ public class ApplicationUI
      */
     private void findLiteratureByTitle()
     {
-        System.out.println("Please enter title of the literature you want to find: ");
-        String title = scannerString();
-        System.out.println("What literature do you want to find?");
         try
         {
-
+            System.out.println("What literature type do you want to find search through?");
             this.showMenu(typeMenu);
             int typeSelection = this.menuInput(typeMenu); // Read input from user
+
+            System.out.println("Please enter title of the literature you want to find: ");
+            String title = scannerString();
 
             switch (typeSelection)
             {
@@ -396,7 +428,7 @@ public class ApplicationUI
                     break;
 
                 case TYPE_SERIES:
-                    BookSeries bookSeries = (BookSeries) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
+                    BookSeries bookSeries = (BookSeries) this.registry.getLiteratureByTitle(title, TYPE_SERIES);
                     if (bookSeries != null)
                     {
                         this.printLiterature(bookSeries);
@@ -407,11 +439,11 @@ public class ApplicationUI
                     }
                     break;
 
-                case TYPE_PERIODICAL:
+                case TYPE_NEWSPAPER:
                     Periodical periodical = (Periodical) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
                     if (periodical != null)
                     {
-                        this.printLiterature(periodical);
+                        this.printLiterature(magazine);
                     }
                     else
                     {
@@ -419,7 +451,7 @@ public class ApplicationUI
                     }
                     break;
 
-                case 4:
+                case 5:
                     System.out.println("Task was exited.");
                     break;
             }
@@ -452,10 +484,6 @@ public class ApplicationUI
             {
                 printLiterature((Book) literature);
             }
-            if (literature instanceof Periodical)
-            {
-                printLiterature((Periodical) literature);
-            }
             if (literature instanceof BookSeries)
             {
                 printLiterature((BookSeries) literature);
@@ -466,6 +494,14 @@ public class ApplicationUI
                     System.out.print("         ");
                     printLiterature(book);
                 }
+            }
+            if (literature instanceof Newspaper)
+            {
+                printLiterature((Newspaper) literature);
+            }
+            if (literature instanceof Magazine)
+            {
+                printLiterature((Magazine) literature);
             }
 
         }
@@ -514,28 +550,35 @@ public class ApplicationUI
     }
 
     /**
-     * Prints out the book that is
+     * Prints out the book in the bookseries that is
      * given in the parameter.
      * It prints one version with and without series.
      *
-     * @param book Gives the book you want to print the details for.
+     * @param periodical Gives the periodical you want to print the details for.
      */
-    private void printLiterature(Periodical book)
+    private void printLiterature(Periodical periodical)
     {
-        System.out.println("Title: " + book.getTitle() + ", Publisher: " + book.getPublisher()
-                + ", Genre: " + book.getGenre());
+//        if(periodical instanceof Magazine)
+//        {
+//            System.out.print("MAGAZINE: ");
+//        }
+//        if(periodical instanceof Newspaper)
+//        {
+//            System.out.print("NEWSPAPER: ");
+//        }
+        System.out.println("Title: " + periodical.getTitle() + ", Publisher: " + periodical.getPublisher()
+                + ", Genre: " + periodical.getGenre() + ", Release number: " + periodical.getReleases());
     }
 
     /**
-     * Prints out the book that is
+     * Prints out the newspaper that is
      * given in the parameter.
-     * It prints one version with and without series.
      *
-     * @param book Gives the book you want to print the details for.
+     * @param bookSeries Gives the bookseries you want to print the details for.
      */
-    private void printLiterature(BookSeries book)
+    private void printLiterature(BookSeries bookSeries)
     {
-        System.out.println("Title: " + book.getTitle() + ", Publisher: " + book.getPublisher());
+        System.out.println("Title: " + bookSeries.getTitle() + ", Publisher: " + bookSeries.getPublisher());
     }
 
     private void printNoLiterature()
@@ -619,6 +662,4 @@ public class ApplicationUI
         }
         return menuSelection;
     }
-
-
 }
