@@ -7,6 +7,9 @@ public class BookSeries extends Literature
 
     public BookSeries(String title, String publisher)
     {
+        if(title == null) { title = "";}
+        if(publisher == null) { publisher = "";}
+
         setTitle(title);
         setPublisher(publisher);
         bookSeries = new ArrayList<Book>();

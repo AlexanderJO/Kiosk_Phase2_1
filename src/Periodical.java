@@ -8,6 +8,11 @@ public abstract class Periodical extends Literature
      */
     public Periodical(String title, String publisher, String genre, int releases)
     {
+        if(title == null) { title = ""; }
+        if(publisher == null) { publisher = ""; }
+        if(genre == null) { genre = ""; }
+        if(releases < 0) { releases = 0; }
+
         setTitle(title);
         setPublisher(publisher);
         this.genre = genre;

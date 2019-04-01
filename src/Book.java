@@ -25,6 +25,13 @@ public class Book extends Literature
      */
     public Book(String title, String publisher, String author, String edition, String datePublished)
     {
+        if(title == null) { title = ""; }
+        if(publisher == null) { publisher = ""; }
+        if(author == null) { author = ""; }
+        if(edition == null) { edition = ""; }
+        if(datePublished == null) { datePublished = ""; }
+
+
         setTitle(title);
         setPublisher(publisher);
         this.author = author;
