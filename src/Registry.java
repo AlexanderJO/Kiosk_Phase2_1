@@ -170,7 +170,17 @@ public class Registry
                     break;
 
                 case 3:
-                    if(literature instanceof Periodical)
+                    if(literature instanceof Newspaper)
+                    {
+                        if(literature.getTitle().equals(title))
+                        {
+                            return literature;
+                        }
+                    }
+                    break;
+
+                case 4:
+                    if(literature instanceof Magazine)
                     {
                         if(literature.getTitle().equals(title))
                         {

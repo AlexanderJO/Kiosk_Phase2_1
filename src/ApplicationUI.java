@@ -404,14 +404,15 @@ public class ApplicationUI
      */
     private void findLiteratureByTitle()
     {
-        System.out.println("Please enter title of the literature you want to find: ");
-        String title = scannerString();
+
         System.out.println("What literature do you want to find?");
         try
         {
-
             this.showMenu(typeMenu);
             int typeSelection = this.menuInput(typeMenu); // Read input from user
+
+            System.out.println("Please enter title of the literature you want to find: ");
+            String title = scannerString();
 
             switch (typeSelection)
             {
@@ -428,7 +429,7 @@ public class ApplicationUI
                     break;
 
                 case TYPE_SERIES:
-                    BookSeries bookSeries = (BookSeries) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
+                    BookSeries bookSeries = (BookSeries) this.registry.getLiteratureByTitle(title, TYPE_SERIES);
                     if (bookSeries != null)
                     {
                         this.printLiterature(bookSeries);
@@ -440,10 +441,10 @@ public class ApplicationUI
                     break;
 
                 case TYPE_NEWSPAPER:
-                    Periodical periodical = (Periodical) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
-                    if (periodical != null)
+                    Newspaper newspaper = (Newspaper) this.registry.getLiteratureByTitle(title, TYPE_NEWSPAPER);
+                    if (newspaper != null)
                     {
-                        this.printLiterature(periodical);
+                        this.printLiterature(newspaper);
                     }
                     else
                     {
@@ -451,7 +452,19 @@ public class ApplicationUI
                     }
                     break;
 
-                case 4:
+                    case TYPE_MAGAZINE:
+                    Magazine magazine = (Magazine) this.registry.getLiteratureByTitle(title, TYPE_MAGAZINE);
+                    if (magazine != null)
+                    {
+                        this.printLiterature(magazine);
+                    }
+                    else
+                    {
+                        printNoLiterature();
+                    }
+                    break;
+
+                case 5:
                     System.out.println("Task was exited.");
                     break;
             }
