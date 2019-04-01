@@ -209,7 +209,7 @@ public class Registry
         bookSeries.addBookToSeries(new Book("Book 4", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
         bookSeries.addBookToSeries(new Book("Book 5", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
 
-        this.literatureList.add(new Periodical("Mor Di", "Anibalus", "Sport", "Magazine", 100));
-        this.literatureList.add(new Periodical("Dagens hete nytt", "VG", "Sladder", "Avise", 100));
+        this.literatureList.add(new Magazine("Mor Di", "Anibalus", "Sport", 100));
+        this.literatureList.add(new Newspaper("Dagens hete nytt", "VG", "Sladder",  100));
     }
 }
