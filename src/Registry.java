@@ -112,35 +112,12 @@ public class Registry
     }
 
     /**
-     * Return book by title. Title is assumed to be unique.
+     * Return literature by title. Title is assumed to be unique.
      *
-     * @param title Title of the book.
-     * @return Return book by title.
+     * @param title Title of the literature.
+     * @param type Shows what type of literature you want to find.
+     * @return Return literature by title.
      */
-    public Book getBookByTitle(String title)
-    {
-        Book book = null;
-
-        boolean found = false;
-        int index = 0;
-
-        while ( index < this.literatureList.size() && !found )
-        {
-            if ( this.literatureList.get(index).getTitle().equals(title) )
-            {
-
-                Literature literature = this.literatureList.get(index);
-                book = (Book) literature;
-
-                found = true;
-            }
-
-            index++;
-        }
-
-        return book;
-    }
-
     public Literature getLiteratureByTitle(String title, int type)
     {
         Iterator<Literature> literatureIt = literatureList.iterator();
@@ -170,7 +147,17 @@ public class Registry
                     break;
 
                 case 3:
-                    if(literature instanceof Periodical)
+                    if(literature instanceof Newspaper)
+                    {
+                        if(literature.getTitle().equals(title))
+                        {
+                            return literature;
+                        }
+                    }
+                    break;
+
+                case 4:
+                    if(literature instanceof Magazine)
                     {
                         if(literature.getTitle().equals(title))
                         {
@@ -191,6 +178,9 @@ public class Registry
         return this.literatureList.iterator();
     }
 
+    /**
+     *
+     */
     public void fillBookListWithDummies()
     {
         Book book1 = new Book("Book 2", "Publisher 1", "Author 1", "First Edition", "2019.01.01");
@@ -209,7 +199,7 @@ public class Registry
         bookSeries.addBookToSeries(new Book("Book 4", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
         bookSeries.addBookToSeries(new Book("Book 5", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
 
-        this.literatureList.add(new Periodical("Mor Di", "Anibalus", "Sport", "Magazine", 100));
-        this.literatureList.add(new Periodical("Dagens hete nytt", "VG", "Sladder", "Avise", 100));
+        this.literatureList.add(new Magazine("Mor Di", "Anibalus", "Sport", 100));
+        this.literatureList.add(new Newspaper("Dagens hete nytt", "VG", "Daily news and sladder",100));
     }
 }
