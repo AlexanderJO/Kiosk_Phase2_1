@@ -413,9 +413,10 @@ public class ApplicationUI
      */
     private void findLiteratureByTitle()
     {
+
+        System.out.println("What literature do you want to find?");
         try
         {
-            System.out.println("What literature type do you want to find search through?");
             this.showMenu(typeMenu);
             int typeSelection = this.menuInput(typeMenu); // Read input from user
 
@@ -449,7 +450,7 @@ public class ApplicationUI
                     break;
 
                 case TYPE_NEWSPAPER:
-                    Periodical newspaper = (Periodical) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
+                    Newspaper newspaper = (Newspaper) this.registry.getLiteratureByTitle(title, TYPE_NEWSPAPER);
                     if (newspaper != null)
                     {
                         this.printLiterature(newspaper);
@@ -460,8 +461,8 @@ public class ApplicationUI
                     }
                     break;
 
-                case TYPE_MAGAZINE:
-                    Periodical magazine = (Periodical) this.registry.getLiteratureByTitle(title, TYPE_BOOK);
+                    case TYPE_MAGAZINE:
+                    Magazine magazine = (Magazine) this.registry.getLiteratureByTitle(title, TYPE_MAGAZINE);
                     if (magazine != null)
                     {
                         this.printLiterature(magazine);
