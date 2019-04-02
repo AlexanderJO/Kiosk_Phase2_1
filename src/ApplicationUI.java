@@ -457,9 +457,12 @@ public class ApplicationUI
         {
             this.showMenu(typeMenu);
             int typeSelection = this.menuInput(typeMenu); // Read input from user
-
-            System.out.println("Please enter title of the literature you want to find: ");
-            String title = scannerString();
+            String title="";
+            if(typeSelection != 5)
+            {
+                System.out.println("Please enter title of the literature you want to find: ");
+                title = scannerString();
+            }
 
             switch (typeSelection)
             {
@@ -534,9 +537,12 @@ public class ApplicationUI
         {
             this.showMenu(typeMenu);
             int typeSelection = this.menuInput(typeMenu); // Read input from user
-
-            System.out.println("Please enter publisher of the literature you want to find: ");
-            String publisher = scannerString();
+            String publisher = "";
+            if(typeSelection != 5)
+            {
+                System.out.println("Please enter publisher of the literature you want to find: ");
+                publisher = scannerString();
+            }
 
             switch (typeSelection)
             {
