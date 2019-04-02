@@ -19,80 +19,38 @@ public class RegistryTest
         Registry registry = new Registry();
         registry.addLiterature(bookSeries);
         registry.addBookToSeries("ADA", new Book("Arne", "Bjarne", "Tore","123", "21"));
-        assertEquals(1, bookSeries.)
+        assertEquals(1, bookSeries.getSize());
     }
 
     @Test
-    public void testAddBook()
+    public void testRemoveBookFromSeries()
     {
-        Registry registry = new Registry();
-        registry.addLiterature();
-        assertEquals("Arne", registry.getBookByTitle("Arne").getTitle());
-    }
-
-    @Test
-    public void testAddBookWithSeries()
-    {
-        Registry registry = new Registry();
-        registry.addBookWithSeries("Arne", "Publisher", "Author", "7", "2019.02.01", "Series");
-        assertEquals("Series", registry.getBookByTitle("Arne").getSeries());
-    }
-
-    @Test
-    public void testEmptyList()
-    {
-        Registry registry = new Registry();
-        assertEquals(null, registry.getBookByTitle("Arne"));
-    }
-
-    @Test
-    public void testRemoveBook()
-    {
+        Literature literature = new Book("Bok1", "Publisher1", "Author1", "23", "234");
         boolean bookMade = false;
         Registry registry = new Registry();
-        registry.addBook("Arne", "Publisher", "Author", "7", "2019.02.01");
+        registry.addLiterature(literature);
         if (registry.getBookByTitle("Arne") != null)
         {
             bookMade = true;
         }
         if (bookMade)
         {
-            registry.removeBook("Arne");
+            registry.removeLiterature(literature);
             assertNull(registry.getBookByTitle("Arne"));
         }
         assertTrue(bookMade);
     }
 
-    @Test
-public void testGetBookByTitleCorrectTitle()
-{
-    Registry registry = new Registry();
-    registry.addBook("Arne", "Publisher", "Author", "7", "2019.02.01");
-    assertEquals("Arne", registry.getBookByTitle("Arne").getTitle());
-}
-
-    @Test
-    public void testGetBookByTitleWrongTitle()
-    {
-        Registry registry = new Registry();
-        registry.addBook("Arne", "Publisher", "Author", "7", "2019.02.01");
-        try
-        {
-            registry.getBookByTitle("arne").getTitle();
-            fail("should've thrown an exception");
-        } catch (Throwable NullPointerException) {
-            assertEquals(NullPointerException.class, NullPointerException.getClass());
-        }
-    }
 
     @Test
     public void testGetIterator()
     {
+        Literature literature = new Book("Bok1", "Publisher1", "Author1", "2", "24");
         Registry registry = new Registry();
 
         for (int i = 1; i<11; i++)
         {
-            registry.addBook("Book "+i, "Publisher "+i, "Author "+i, "Edition "+i, "2019.01."+i);
+            registry.addLiterature(literature);
         }
 
         Iterator<Literature> bookListIt = registry.getIterator();

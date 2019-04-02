@@ -29,4 +29,12 @@ public class BookSeries extends Literature
     {
         this.bookSeries.remove(book);
     }
+
+    /**
+     * @return The size of the bookseries
+     */
+    public int getSize()
+    {
+        return this.bookSeries.size();
+    }
 }
