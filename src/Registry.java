@@ -93,7 +93,7 @@ public class Registry
         Boolean found = false;
         Iterator<Literature> literatureIt = literatureList.iterator();
 
-        while ( literatureIt.hasNext() )
+        while ( literatureIt.hasNext() && !found)
         {
             Literature literature = literatureIt.next();
 
@@ -171,6 +171,66 @@ public class Registry
     }
 
     /**
+     * Return literature by title. Title is assumed to be unique.
+     *
+     * @param publisher Publisher of the literature.
+     * @param type Shows what type of literature you want to find.
+     * @return Return literature by title.
+     */
+    public Iterator<Literature> getLiteratureByPublisher(String publisher, int type)
+    {
+        ArrayList<Literature> publisherList =  new ArrayList<Literature>();
+        Iterator<Literature> literatureIt = literatureList.iterator();
+        while(literatureIt.hasNext())
+        {
+            Literature literature = literatureIt.next();
+            switch (type)
+            {
+                case 1:
+                    if(literature instanceof Book)
+                    {
+                        if(literature.getPublisher().equals(publisher))
+                        {
+                            publisherList.add(literature);
+                        }
+                    }
+                    break;
+
+                case 2:
+                    if(literature instanceof BookSeries)
+                    {
+                        if(literature.getPublisher().equals(publisher))
+                        {
+                            publisherList.add(literature);
+                        }
+                    }
+                    break;
+
+                case 3:
+                    if(literature instanceof Newspaper)
+                    {
+                        if(literature.getPublisher().equals(publisher))
+                        {
+                            publisherList.add(literature);
+                        }
+                    }
+                    break;
+
+                case 4:
+                    if(literature instanceof Magazine)
+                    {
+                        if(literature.getPublisher().equals(publisher))
+                        {
+                            publisherList.add(literature);
+                        }
+                    }
+                    break;
+            }
+        }
+        return publisherList.iterator();
+    }
+
+    /**
      * Returns the iterator over the literatureList.
      */
     public Iterator<Literature> getIterator()
@@ -195,9 +255,9 @@ public class Registry
         this.literatureList.add(bookSeries);
         bookSeries.addBookToSeries(new Book("Book 1", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
         bookSeries.addBookToSeries(book1);
-        bookSeries.addBookToSeries(new Book("Book 3", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
+        bookSeries.addBookToSeries(new Book("Book 3", "Publisher 7", "Author 1", "First Edition", "2019.01.01"));
         bookSeries.addBookToSeries(new Book("Book 4", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
-        bookSeries.addBookToSeries(new Book("Book 5", "Publisher 1", "Author 1", "First Edition", "2019.01.01"));
+        bookSeries.addBookToSeries(new Book("Book 5", "Publisher 8", "Author 1", "First Edition", "2019.01.01"));
 
         this.literatureList.add(new Magazine("Mor Di", "Anibalus", "Sport", 100));
         this.literatureList.add(new Newspaper("Dagens hete nytt", "VG", "Daily news and sladder",100));

@@ -15,10 +15,10 @@ public class BookSeriesTest
         bookSeries.addBookToSeries(new Book("Two towers", "Bokklubben", "Mannen", "3", "654"));
         bookSeries.addBookToSeries(new Book("The return of the king", "Bokklubben", "Mannen", "3", "654"));
         Book bookResult = null;
-        Iterator<Book> bookSeriesIt = bookSeries.getBookSeriesIterator();
+        Iterator<Literature> bookSeriesIt = bookSeries.getBookSeriesIterator();
         while (bookSeriesIt.hasNext())
         {
-            Book book = bookSeriesIt.next();
+            Book book = (Book)bookSeriesIt.next();
             if(book.getTitle().equals("Two towers"))
             {
                 bookResult = book;
@@ -35,19 +35,19 @@ public class BookSeriesTest
         bookSeries.addBookToSeries(new Book("Two towers", "Bokklubben", "Mannen", "3", "654"));
         bookSeries.addBookToSeries(new Book("The return of the king", "Bokklubben", "Mannen", "3", "654"));
         Book bookResults = null;
-        Iterator<Book> bookSeriesIt1 = bookSeries.getBookSeriesIterator();
+        Iterator<Literature> bookSeriesIt1 = bookSeries.getBookSeriesIterator();
         while (bookSeriesIt1.hasNext())
         {
-            Book book = bookSeriesIt1.next();
+            Book book = (Book)bookSeriesIt1.next();
             if(book.getTitle().equals("Two towers"))
             {
                 bookSeries.removeBookFromSeries(book);
             }
         }
-        Iterator<Book> bookSeriesIt2 = bookSeries.getBookSeriesIterator();
+        Iterator<Literature> bookSeriesIt2 = bookSeries.getBookSeriesIterator();
         while (bookSeriesIt2.hasNext())
         {
-            Book book = bookSeriesIt2.next();
+            Book book = (Book)bookSeriesIt2.next();
             if(book.getTitle().equals("Two towers"))
             {
                 bookResults = book;

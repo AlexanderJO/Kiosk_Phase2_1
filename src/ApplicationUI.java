@@ -36,7 +36,7 @@ public class ApplicationUI
             "1.  List all literature",
             "2.  Add new literature",
             "3.  Add book to series",
-            "4.  Find literature by title",
+            "4.  Search for literature",
             "5.  Remove a literature by title",
             "6.  Remove a book from series",
     };
@@ -47,12 +47,20 @@ public class ApplicationUI
             "4.  Magazine"
     };
 
+    private String[] searchMenu = {
+            "1.  Title",
+            "2.  Publisher"
+    };
+
     private Registry registry;
 
     private final static int TYPE_BOOK = 1;
     private final static int TYPE_SERIES = 2;
     private final static int TYPE_NEWSPAPER = 3;
     private final static int TYPE_MAGAZINE = 4;
+
+    private final static int SEARCH_TITLE = 1;
+    private final static int SEARCH_PUBLISHER = 2;
 
     /**
      * This is the constructor of the ApplicationUI class.
@@ -85,7 +93,7 @@ public class ApplicationUI
                 switch (menuSelection)
                 {
                     case 1:
-                        this.listAllLiterature();
+                        this.listLiteratureIterator(this.registry.getIterator());
                         break;
 
                     case 2:
@@ -97,7 +105,7 @@ public class ApplicationUI
                         break;
 
                     case 4:
-                        this.findLiteratureByTitle();
+                        this.findLiterature();
                         break;
 
                     case 5:
@@ -408,6 +416,36 @@ public class ApplicationUI
 
     // ---------------- Accessor Methods ---------------
 
+    private void findLiterature()
+    {
+        System.out.println("What type of kay word do want to use in this search?");
+        try
+        {
+            this.showMenu(searchMenu);
+            int searchSelection = this.menuInput(searchMenu); // Read input from user
+            switch (searchSelection)
+            {
+                case SEARCH_TITLE:
+                    findLiteratureByTitle();
+                    break;
+
+                case SEARCH_PUBLISHER:
+                    findLiteratureByPublisher();
+                    break;
+
+                case 3:
+                    System.out.println("Task was exited.");
+                    break;
+
+            }
+        }
+        catch (InputMismatchException ime)
+        {
+            printMenuError(searchMenu);
+        }
+
+    }
+
     /**
      * Find and display a literature based on title.
      */
@@ -485,23 +523,70 @@ public class ApplicationUI
 
     }
 
+    /**
+     * Find and display a literature based on title.
+     */
+    private void findLiteratureByPublisher()
+    {
+
+        System.out.println("What literature do you want to find?");
+        try
+        {
+            this.showMenu(typeMenu);
+            int typeSelection = this.menuInput(typeMenu); // Read input from user
+
+            System.out.println("Please enter publisher of the literature you want to find: ");
+            String publisher = scannerString();
+
+            switch (typeSelection)
+            {
+                case TYPE_BOOK:
+                    Iterator<Literature> publisherList1 = this.registry.getLiteratureByPublisher(publisher, TYPE_BOOK);
+                    this.listLiteratureIterator(publisherList1);
+                    break;
+
+                case TYPE_SERIES:
+                    Iterator<Literature> publisherList2 = this.registry.getLiteratureByPublisher(publisher, TYPE_SERIES);
+                    this.listLiteratureIterator(publisherList2);
+                    break;
+
+                case TYPE_NEWSPAPER:
+                    Iterator<Literature> publisherList3 = this.registry.getLiteratureByPublisher(publisher, TYPE_NEWSPAPER);
+                    this.listLiteratureIterator(publisherList3);
+                    break;
+
+                case TYPE_MAGAZINE:
+                    Iterator<Literature> publisherList4 = this.registry.getLiteratureByPublisher(publisher, TYPE_MAGAZINE);
+                    this.listLiteratureIterator(publisherList4);
+                    break;
+
+                case 5:
+                    System.out.println("Task was exited.");
+                    break;
+            }
+        }
+        catch (InputMismatchException ime)
+        {
+            printMenuError(typeMenu);
+        }
+
+    }
+
     // ---------------- Accessor Methods ---------------
 
     /**
      * Lists all the books in the register
      */
-    private void listAllLiterature()
+    private void listLiteratureIterator(Iterator<Literature> literatureList)
     {
-        Iterator<Literature> bookListIt = this.registry.getIterator();
-
-        if (!bookListIt.hasNext())
+        if (!literatureList.hasNext())
         {
             System.out.println("No books in registry.");
         }
 
-        while (bookListIt.hasNext())
+        while (literatureList.hasNext())
         {
-            Literature literature = bookListIt.next();
+            Literature literature = literatureList.next();
             if (literature instanceof Book)
             {
                 printLiterature((Book) literature);
@@ -509,13 +594,6 @@ public class ApplicationUI
             if (literature instanceof BookSeries)
             {
                 printLiterature((BookSeries) literature);
-                Iterator<Book> bookSeriesIt = ((BookSeries) literature).getBookSeriesIterator();
-                while (bookSeriesIt.hasNext())
-                {
-                    Book book = bookSeriesIt.next();
-                    System.out.print("         ");
-                    printLiterature(book);
-                }
             }
             if (literature instanceof Newspaper)
             {
@@ -601,6 +679,13 @@ public class ApplicationUI
     private void printLiterature(BookSeries bookSeries)
     {
         System.out.println("Title: " + bookSeries.getTitle() + ", Publisher: " + bookSeries.getPublisher());
+        Iterator<Literature> bookSeriesIt = bookSeries.getBookSeriesIterator();
+        while (bookSeriesIt.hasNext())
+        {
+            Book book = (Book) bookSeriesIt.next();
+            System.out.print("         ");
+            printLiterature(book);
+        }
     }
 
     private void printNoLiterature()

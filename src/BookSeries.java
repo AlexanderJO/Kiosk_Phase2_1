@@ -3,16 +3,16 @@ import java.util.Iterator;
 
 public class BookSeries extends Literature
 {
-    private ArrayList<Book> bookSeries;
+    private ArrayList<Literature> bookSeries;
 
     public BookSeries(String title, String publisher)
     {
         setTitle(title);
         setPublisher(publisher);
-        bookSeries = new ArrayList<Book>();
+        bookSeries = new ArrayList<Literature>();
     }
 
-    public Iterator<Book> getBookSeriesIterator()
+    public Iterator<Literature> getBookSeriesIterator()
     {
         return bookSeries.iterator();
     }
