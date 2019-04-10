@@ -10,22 +10,19 @@ import java.util.Scanner;
  * In this ApplicationUI you can;
  * <p>
  * <ul>
- * <li>    Add book with title, publisher, author, edition and publish date   </li>
- * <li>    Add book with title, publisher, author, edition, publish date and series </li>
+ * <li>    Add new literature </li>
  * <li>    Add book to series </li>
- * <li>    Remove book by title   </li>
- * <li>    List and get all books    </li>
- * <li>    List and get all books by title </li>
- * <li>    List and get all books by author </li>
- * <li>    List and get all books by publisher </li>
- * <li>    List and get all books in series </li>
+ * <li>    Remove literature by title   </li>
+ * <li>    List and get all literature   </li>
+ * <li>    List and get literature by title </li>
+ * <li>    List and get all literature by publisher </li>
  * </ul>
  * <p>
  * <b> Important note: fillBookListWithDummies to be removed when released to customer.
  * Method used for debugging purposes.</b>
  *
  * @author Alexander J. Overvåg, Sondre Nerhus, Gustav S. Hagen
- * @version v2.0 (beta) 2019.03.06
+ * @version v3.0 (beta) 2019.04.03
  */
 public class ApplicationUI
 {
@@ -36,7 +33,7 @@ public class ApplicationUI
             "1.  List all literature",
             "2.  Add new literature",
             "3.  Add book to series",
-            "4.  Find literature by title",
+            "4.  Search for literature",
             "5.  Remove a literature by title",
             "6.  Remove a book from series",
     };
@@ -47,12 +44,21 @@ public class ApplicationUI
             "4.  Magazine"
     };
 
+    private String[] searchMenu = {
+            "1.  Title",
+            "2.  Publisher"
+    };
+
     private Registry registry;
 
+    // These are constants that are used in the switch case.
     private final static int TYPE_BOOK = 1;
     private final static int TYPE_SERIES = 2;
     private final static int TYPE_NEWSPAPER = 3;
     private final static int TYPE_MAGAZINE = 4;
+
+    private final static int SEARCH_TITLE = 1;
+    private final static int SEARCH_PUBLISHER = 2;
 
     /**
      * This is the constructor of the ApplicationUI class.
@@ -85,7 +91,7 @@ public class ApplicationUI
                 switch (menuSelection)
                 {
                     case 1:
-                        this.listAllLiterature();
+                        this.listLiteratureIterator(this.registry.getIterator());
                         break;
 
                     case 2:
@@ -97,7 +103,7 @@ public class ApplicationUI
                         break;
 
                     case 4:
-                        this.findLiteratureByTitle();
+                        this.findLiterature();
                         break;
 
                     case 5:
@@ -212,7 +218,7 @@ public class ApplicationUI
         String datePublished = "";
         if (!isStringEmpty(edition))
         {
-            System.out.println("Please enter the publishing date of the book: ");
+            System.out.println("Please enter the publishing date of the book:  ");
             datePublished = scannerString();                     // Waits for the user to push enter.
         }
 
@@ -283,6 +289,11 @@ public class ApplicationUI
         }
     }
 
+    /**
+     * Removes a book from series.
+     * Asks for user input for title of book
+     * and title of series.
+     */
     private void removeBookFromSeries()
     {
         System.out.println("Please enter the title of the book: ");
@@ -317,6 +328,14 @@ public class ApplicationUI
         }
     }
 
+    /**
+     * Adds a periodical
+     * Asks for user input for title, publisher
+     * , genre and releases.
+     * @param type This value is the number 1 or 2,
+     *             this shows what type of periodical want to make
+     *             Newspaper og Magazine.
+     */
     private void addNewPeriodical(int type)
     {
         System.out.println("Please enter the title: ");
@@ -369,6 +388,11 @@ public class ApplicationUI
         }
     }
 
+    /**
+     * Removes a literature by title
+     * Asks for user input for title of the literature
+     * and for what type of literature u want to remove.
+     */
     private void removeLiteratureByTitle()
     {
         System.out.println("Please enter the type of the literature that you want to remove: ");
@@ -409,6 +433,41 @@ public class ApplicationUI
     // ---------------- Accessor Methods ---------------
 
     /**
+     * Finds literature by title or publisher.
+     * Asks for user input for what type you want
+     * search for.
+     */
+    private void findLiterature()
+    {
+        System.out.println("What type of kay word do want to use in this search?");
+        try
+        {
+            this.showMenu(searchMenu);
+            int searchSelection = this.menuInput(searchMenu); // Read input from user
+            switch (searchSelection)
+            {
+                case SEARCH_TITLE:
+                    findLiteratureByTitle();
+                    break;
+
+                case SEARCH_PUBLISHER:
+                    findLiteratureByPublisher();
+                    break;
+
+                case 3:
+                    System.out.println("Task was exited.");
+                    break;
+
+            }
+        }
+        catch (InputMismatchException ime)
+        {
+            printMenuError(searchMenu);
+        }
+
+    }
+
+    /**
      * Find and display a literature based on title.
      */
     private void findLiteratureByTitle()
@@ -419,9 +478,12 @@ public class ApplicationUI
         {
             this.showMenu(typeMenu);
             int typeSelection = this.menuInput(typeMenu); // Read input from user
-
-            System.out.println("Please enter title of the literature you want to find: ");
-            String title = scannerString();
+            String title="";
+            if(typeSelection != 5)
+            {
+                System.out.println("Please enter title of the literature you want to find: ");
+                title = scannerString();
+            }
 
             switch (typeSelection)
             {
@@ -485,23 +547,74 @@ public class ApplicationUI
 
     }
 
+    /**
+     * Find and display a literature based on publisher.
+     */
+    private void findLiteratureByPublisher()
+    {
+
+        System.out.println("What literature do you want to find?");
+        try
+        {
+            this.showMenu(typeMenu);
+            int typeSelection = this.menuInput(typeMenu); // Read input from user
+            String publisher = "";
+            if(typeSelection != 5)
+            {
+                System.out.println("Please enter publisher of the literature you want to find: ");
+                publisher = scannerString();
+            }
+
+            switch (typeSelection)
+            {
+                case TYPE_BOOK:
+                    Iterator<Literature> publisherList1 = this.registry.getLiteratureByPublisher(publisher, TYPE_BOOK);
+                    this.listLiteratureIterator(publisherList1);
+                    break;
+
+                case TYPE_SERIES:
+                    Iterator<Literature> publisherList2 = this.registry.getLiteratureByPublisher(publisher, TYPE_SERIES);
+                    this.listLiteratureIterator(publisherList2);
+                    break;
+
+                case TYPE_NEWSPAPER:
+                    Iterator<Literature> publisherList3 = this.registry.getLiteratureByPublisher(publisher, TYPE_NEWSPAPER);
+                    this.listLiteratureIterator(publisherList3);
+                    break;
+
+                case TYPE_MAGAZINE:
+                    Iterator<Literature> publisherList4 = this.registry.getLiteratureByPublisher(publisher, TYPE_MAGAZINE);
+                    this.listLiteratureIterator(publisherList4);
+                    break;
+
+                case 5:
+                    System.out.println("Task was exited.");
+                    break;
+            }
+        }
+        catch (InputMismatchException ime)
+        {
+            printMenuError(typeMenu);
+        }
+
+    }
+
     // ---------------- Accessor Methods ---------------
 
     /**
-     * Lists all the books in the register
+     * Lists all the literature in the iterator.
+     * @param literatureList The iterator you want to print.
      */
-    private void listAllLiterature()
+    private void listLiteratureIterator(Iterator<Literature> literatureList)
     {
-        Iterator<Literature> bookListIt = this.registry.getIterator();
-
-        if (!bookListIt.hasNext())
+        if (!literatureList.hasNext())
         {
             System.out.println("No books in registry.");
         }
 
-        while (bookListIt.hasNext())
+        while (literatureList.hasNext())
         {
-            Literature literature = bookListIt.next();
+            Literature literature = literatureList.next();
             if (literature instanceof Book)
             {
                 printLiterature((Book) literature);
@@ -509,13 +622,6 @@ public class ApplicationUI
             if (literature instanceof BookSeries)
             {
                 printLiterature((BookSeries) literature);
-                Iterator<Book> bookSeriesIt = ((BookSeries) literature).getBookSeriesIterator();
-                while (bookSeriesIt.hasNext())
-                {
-                    Book book = bookSeriesIt.next();
-                    System.out.print("         ");
-                    printLiterature(book);
-                }
             }
             if (literature instanceof Newspaper)
             {
@@ -531,6 +637,10 @@ public class ApplicationUI
 
     // ----------- Print Methods ---------------
 
+    /**
+     * Prints an error for the menus.
+     * @param menu the menu that you ann error message for.
+     */
     private void printMenuError(String[] menu)
     {
         System.out.println("\nERROR: Please provide a number between 1 and " + (menu.length + 1) + ".\n");
@@ -539,6 +649,7 @@ public class ApplicationUI
 
     /**
      * Displays the menu to the user.
+     * @param menu The menu you want to display.
      */
     private void showMenu(String[] menu)
     {
@@ -552,7 +663,7 @@ public class ApplicationUI
             {
                 System.out.println(menuChoice);
             }
-            System.out.println(maxMenuItemNumber + ". Exit\n");
+            System.out.println(maxMenuItemNumber + ".  Exit\n");
             System.out.println("Please choose a number from (1-" + maxMenuItemNumber + "): ");
         }
     }
@@ -560,8 +671,6 @@ public class ApplicationUI
     /**
      * Prints out the book that is
      * given in the parameter.
-     * It prints one version with and without series.
-     *
      * @param book Gives the book you want to print the details for.
      */
     private void printLiterature(Book book)
@@ -572,10 +681,7 @@ public class ApplicationUI
     }
 
     /**
-     * Prints out the book in the bookseries that is
-     * given in the parameter.
-     * It prints one version with and without series.
-     *
+     * Prints out the periodical given in the parameter
      * @param periodical Gives the periodical you want to print the details for.
      */
     private void printLiterature(Periodical periodical)
@@ -593,16 +699,26 @@ public class ApplicationUI
     }
 
     /**
-     * Prints out the newspaper that is
-     * given in the parameter.
-     *
+     * Prints out the bookseries from the parameter
+     * and prints all the books in the series.
      * @param bookSeries Gives the bookseries you want to print the details for.
      */
     private void printLiterature(BookSeries bookSeries)
     {
         System.out.println("Title: " + bookSeries.getTitle() + ", Publisher: " + bookSeries.getPublisher());
+        Iterator<Literature> bookSeriesIt = bookSeries.getBookSeriesIterator();
+        while (bookSeriesIt.hasNext())
+        {
+            Book book = (Book) bookSeriesIt.next();
+            System.out.print("         ");
+            printLiterature(book);
+        }
     }
 
+    /**
+     * The message that are given when no literature
+     * are found in the search.
+     */
     private void printNoLiterature()
     {
         System.out.println("Didn't find any literature matching your search");
@@ -677,10 +793,25 @@ public class ApplicationUI
     private int menuInput(String[] menu) throws InputMismatchException
     {
         int maxMenuItemNumber = menu.length + 1;
-        int menuSelection = scannerInt();
-        if ((menuSelection < 1) || (menuSelection > maxMenuItemNumber))
+        int menuSelection = 0;
+        int count = 1;
+        boolean validInt = false;
+        while(!validInt)
         {
-            throw new InputMismatchException();
+            menuSelection = scannerInt();
+            if ((menuSelection < 1) || (menuSelection > maxMenuItemNumber))
+            {
+                if (count>2)
+                {
+                    throw new InputMismatchException();
+                }
+                System.out.println("Please enter a number between 1 and "+ maxMenuItemNumber);
+            }
+            else
+            {
+                validInt = true;
+            }
+            count++;
         }
         return menuSelection;
     }

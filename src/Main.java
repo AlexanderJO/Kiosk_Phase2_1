@@ -13,7 +13,14 @@ public class Main
      */
     public static void main(String[] args)
     {
-        ApplicationUI appUI = new ApplicationUI();
-        appUI.start();
+        try
+        {
+            ApplicationUI appUI = new ApplicationUI();
+            appUI.start();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Sorry, something want wrong");
+        }
     }
 }

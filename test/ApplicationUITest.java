@@ -4,16 +4,6 @@ import org.junit.Test;
 
 public class ApplicationUITest
 {
-    @Before
-    public void setUp() throws Exception
-    {
-    }
-
-    @After
-    public void tearDown() throws Exception
-    {
-    }
-
     /**
      * HOLD! Blir dette korrekt?
      */
