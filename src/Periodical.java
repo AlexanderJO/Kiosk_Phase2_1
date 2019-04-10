@@ -23,6 +23,10 @@ public abstract class Periodical extends Literature
         return this.genre;
     }
 
+    /**
+     * Returns the releases of the periodical.
+     * @return The releases of the periodical.
+     */
     public int getReleases()
     {
         return this.releases;
