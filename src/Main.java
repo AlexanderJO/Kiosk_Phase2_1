@@ -18,9 +18,10 @@ public class Main
             ApplicationUI appUI = new ApplicationUI();
             appUI.start();
         }
+
         catch (Exception e)
         {
-            System.out.println("Sorry, something want wrong");
+            System.out.println("Sorry, something went wrong");
         }
     }
 }
