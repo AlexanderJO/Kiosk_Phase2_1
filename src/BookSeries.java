@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.api.model.ExceptionType;
+
 import java.util.ArrayList;     //Imports the library to the ArrayList-class
 import java.util.Iterator;      //Imports the library to the ArrayList-class
 
@@ -26,7 +28,16 @@ public class BookSeries extends Literature
      */
     public Iterator<Literature> getBookSeriesIterator()
     {
-        return bookSeries.iterator();
+        Iterator<Literature> bookIterator = bookSeries.iterator();
+        if (!bookIterator.hasNext())
+        {
+                throw new IllegalStateException("The book series contains no books.");
+        }
+
+        else
+        {
+            return bookIterator;
+        }
     }
 
     /**

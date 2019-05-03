@@ -122,7 +122,9 @@ public class ApplicationUI
 
                     default:
                 }
-            } catch (InputMismatchException ime)
+            }
+
+            catch (InputMismatchException ime)
             {
                 printMenuError(mainMenu);
             }
@@ -176,6 +178,7 @@ public class ApplicationUI
 
                 case 5:
                     System.out.println("Task was exited.");
+                    break;
             }
         }
         catch (InputMismatchException ime)
@@ -705,12 +708,27 @@ public class ApplicationUI
      */
     private void printLiterature(BookSeries bookSeries)
     {
+        Iterator<Literature> bookSeriesIt = null;
+
         System.out.println("Title: " + bookSeries.getTitle() + ", Publisher: " + bookSeries.getPublisher());
-        Iterator<Literature> bookSeriesIt = bookSeries.getBookSeriesIterator();
-        while (bookSeriesIt.hasNext())
+
+        // Tries to return the iterator of book series.
+        // throws IllegalStateException if null.
+        try
+        {
+            bookSeriesIt = bookSeries.getBookSeriesIterator();
+        }
+
+        catch ( IllegalStateException emptyBookSeries )
+        {
+            System.out.print("    ");
+            System.out.println("<No books in series>");
+        }
+
+        while (!bookSeriesIt.equals(null) && bookSeriesIt.hasNext())
         {
             Book book = (Book) bookSeriesIt.next();
-            System.out.print("         ");
+            System.out.print("    ");
             printLiterature(book);
         }
     }
